@@ -7,18 +7,36 @@ import random
 #from selenium import webdriver
 #from selenium.webdriver.common.by import By
 
-import requests
-from bs4 import BeautifulSoup
 
-def get_LinkFirstImage(cari_poto):
-	word = cari_poto
-	url = 'https://www.google.com/search?q={0}&tbm=isch'.format(word)
-	content = requests.get(url).content
-	soup = BeautifulSoup(content,'lxml')
-	images = soup.findAll('img')
 
-	print(images[1].get('src'))
-	return images[1].get('src')
+# def get_LinkYT(cari_pidio):
+# 	driver = webdriver.Chrome()
+# 	driver.implicitly_wait(5)
+
+# 	#search_query = input().split()
+# 	search_query = cari_pidio.split(	)
+# 	print(search_query)
+# 	final_query = ''
+# 	link = []
+# 	for word in search_query:
+# 		final_query += word + "+"
+		
+# 	driver.get('https://www.youtube.com/results?search_query={}'.format(final_query))
+# 	select = driver.find_element(By.CSS_SELECTOR, 'div#contents ytd-item-section-renderer>div#contents a#thumbnail')
+# 	link += [select.get_attribute('href')]
+
+# 	print(link)
+# 	linked = link[0]
+# 	try:
+# 		linked = linked.split("/")[4]
+# 	except :
+# 		linked = linked.split("/")[3]
+# 		linked = linked.split("=",1)[1]
+# 		linked = linked.split("&",1)[0]
+# 	linked = "https://www.youtube.com/embed/" + linked
+# 	print(linked)
+
+# 	return linked
 
 def add_bg_from_url():
     st.markdown(
@@ -264,7 +282,7 @@ if prompt := st.chat_input("What is up?"):
 	#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
 
 	print(list_hasil)
-	img_path = get_LinkFirstImage(query)
+	#img_path = get_LinkFirstImage(query)
 
 
 	#message(list_hasil[0])
@@ -287,8 +305,8 @@ if prompt := st.chat_input("What is up?"):
 	# 			key=f"{random.randint(100,1000)}", 
 	# 			allow_html=True
 	# 		)
-	DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
-	st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
+	#DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
+	#st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
 
 	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
 
