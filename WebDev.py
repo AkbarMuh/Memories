@@ -59,7 +59,7 @@ st.write("""
 st.title("Anggap aja chat")
 
 
-from playsound import playsound
+#from playsound import playsound
 import speech_recognition as sr
 from deep_translator import GoogleTranslator
 from gtts import gTTS
@@ -241,7 +241,7 @@ def takecommand():
 		st.text("say that again please.....")
 		speak = gTTS(text="Please repeat the question", lang='en-in', slow=False)
 		speak.save("captured_voice.mp3")
-		playsound('captured_voice.mp3')
+		#playsound('captured_voice.mp3')
 		os.remove('captured_voice.mp3')
 		return "None"
 	return query
@@ -297,7 +297,7 @@ if prompt := st.chat_input("What is up?"):
 	st.session_state.messages.append({"role": "assistant", "content": deskripsi})
 	speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
 	speak.save("captured_voice.mp3")
-	playsound('captured_voice.mp3')
+	#playsound('captured_voice.mp3')
 	os.remove('captured_voice.mp3')
 
 	# message(
