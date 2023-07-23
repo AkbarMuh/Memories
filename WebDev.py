@@ -4,40 +4,11 @@ import pandas as pd
 import numpy as np
 import streamlit.components.v1 as components
 import random
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+#from selenium import webdriver
+#from selenium.webdriver.common.by import By
 
 import requests
 from bs4 import BeautifulSoup
-
-def get_LinkYT(cari_pidio):
-	driver = webdriver.Chrome()
-	driver.implicitly_wait(5)
-
-	#search_query = input().split()
-	search_query = cari_pidio.split(	)
-	print(search_query)
-	final_query = ''
-	link = []
-	for word in search_query:
-		final_query += word + "+"
-		
-	driver.get('https://www.youtube.com/results?search_query={}'.format(final_query))
-	select = driver.find_element(By.CSS_SELECTOR, 'div#contents ytd-item-section-renderer>div#contents a#thumbnail')
-	link += [select.get_attribute('href')]
-
-	print(link)
-	linked = link[0]
-	try:
-		linked = linked.split("/")[4]
-	except :
-		linked = linked.split("/")[3]
-		linked = linked.split("=",1)[1]
-		linked = linked.split("&",1)[0]
-	linked = "https://www.youtube.com/embed/" + linked
-	print(linked)
-
-	return linked
 
 def get_LinkFirstImage(cari_poto):
 	word = cari_poto
@@ -321,11 +292,11 @@ if prompt := st.chat_input("What is up?"):
 
 	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
 
-	linkYT = get_LinkYT(query)
+	#linkYT = get_LinkYT(query)
 	# message(
 	# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
 	# 			key=f"{random.randint(100,1000)}",
 	# 			allow_html=True
 	# 		)
-	DisplayJwbBot(f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
-	st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
+	#DisplayJwbBot(f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
+	#st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
