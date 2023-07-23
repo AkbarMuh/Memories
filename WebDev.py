@@ -2,371 +2,59 @@ import streamlit as st
 import string
 import pandas as pd
 import numpy as np
+import streamlit.components.v1 as components
+import random
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
-st.write("""
-# TBA - Parser 'while do' in Python 
-Kelompok 4 | while <KONDISI> : <AKSI>
-""")
-st.text("while <KONDISI>:\n     <AKSI>")
+import requests
+from bs4 import BeautifulSoup
 
-def lexicalAnalyzer(kalimat):
-    input_string = str(kalimat.lower()+' #')
+def get_LinkYT(cari_pidio):
+	driver = webdriver.Chrome()
+	driver.implicitly_wait(5)
 
-    # initialization
-    list_input = list(string.ascii_lowercase)
-    list_state = ['q0','q00', 'q01', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8',
-                  'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 'q16',
-                  'q17', 'q18', 'q19', 'q20', 'q21', 'q22', 'q23', 'q24',
-                  'q25', 'q26', 'q27', 'q28', 'q29', 'q30', 'q31', 'q32',
-                  'q33', 'q34', 'q35', 'q36', 'q37', 'q38', 'q39', 'q40', 
-                  'q41', 'q42', 'q43', 'q44', 'q45', 'q46', 'q47', 'q48',
-                  'q49', 'q50', 'q51', 'q52', 'q53', 'q54', 'q55', 'q56']
+	#search_query = input().split()
+	search_query = cari_pidio.split(	)
+	print(search_query)
+	final_query = ''
+	link = []
+	for word in search_query:
+		final_query += word + "+"
+		
+	driver.get('https://www.youtube.com/results?search_query={}'.format(final_query))
+	select = driver.find_element(By.CSS_SELECTOR, 'div#contents ytd-item-section-renderer>div#contents a#thumbnail')
+	link += [select.get_attribute('href')]
 
-    variable = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    arithmetic = ['+','-','*','/','%']
-    angka = ['0','1','2','3','4','5','6','7','8','9']
-    simbol = ['<','>','=','!']
+	print(link)
+	linked = link[0]
+	try:
+		linked = linked.split("/")[4]
+	except :
+		linked = linked.split("/")[3]
+		linked = linked.split("=",1)[1]
+		linked = linked.split("&",1)[0]
+	linked = "https://www.youtube.com/embed/" + linked
+	print(linked)
 
-    tabel_transisi = {}
-    for state in list_state:
-        for alphabet in list_input:
-            tabel_transisi[(state, alphabet)] = 'error'
-        tabel_transisi[(state, '#')] = 'error'
-        tabel_transisi[(state, ' ')] = 'error'
+	return linked
 
-    # kalo ada spasi sebelum input
-    tabel_transisi['q0', ' '] = 'q0'
+def get_LinkFirstImage(cari_poto):
+	word = cari_poto
+	url = 'https://www.google.com/search?q={0}&tbm=isch'.format(word)
+	content = requests.get(url).content
+	soup = BeautifulSoup(content,'lxml')
+	images = soup.findAll('img')
 
-    #<while>
-    tabel_transisi['q0', 'w'] = 'q00'
-    tabel_transisi['q00', 'h'] = 'q01'
-    tabel_transisi['q01', 'i'] = 'q00'
-    tabel_transisi['q00', 'l'] = 'q01'
-    tabel_transisi['q01', 'e'] = 'q0'
+	print(images[1].get('src'))
+	return images[1].get('src')
 
-    #<space>
-    tabel_transisi['q0', ' '] = 'q1'
-    
-    #<variabel>
-    for i in variable:
-        tabel_transisi['q1', str(i)] = 'q2'
-
-    #<True>
-    tabel_transisi['q1', 't'] = 'q32'
-    tabel_transisi['q32', 'r'] = 'q31'
-    tabel_transisi['q31', 'u'] = 'q32'
-    tabel_transisi['q32', 'e'] = 'q31'
-    tabel_transisi['q31', ' '] = 'q7'
-    #<False>
-    tabel_transisi['q1', 'f'] = 'q32'
-    tabel_transisi['q32', 'a'] = 'q31'
-    tabel_transisi['q31', 'l'] = 'q32'
-    tabel_transisi['q32', 's'] = 'q31'
-    tabel_transisi['q31', 'e'] = 'q32'
-    tabel_transisi['q32', ' '] = 'q7'
-
-    #<space>      
-    tabel_transisi['q2', ' '] = 'q3'
-
-    #<operator> 
-    for i in simbol:
-        if i == '=' or i == '!':
-            tabel_transisi['q3', str(i)] = 'q34'
-            for i in simbol :
-                tabel_transisi['q34', str(i)] = 'q4'                
-        elif i == '<' or i == '>':
-            tabel_transisi['q3', '<'] = 'q4'
-            tabel_transisi['q3', '>'] = 'q4'
-            tabel_transisi['q4', '='] = 'q4'
-        else:
-            tabel_transisi['q3', str(i)] = 'q4'
-
-    #<space>
-    tabel_transisi['q4', ' '] = 'q5'
-
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q5', str(i)] = 'q6'
-    for i in variable:
-        tabel_transisi['q5', str(i)] = 'q6'
-    
-    #<space>
-    tabel_transisi['q6', ' '] = 'q7'
-    
-    #<do>
-    tabel_transisi['q7', 'd'] = 'q8'
-    tabel_transisi['q7', ':'] = 'q9'
-    tabel_transisi['q8', 'o'] = 'q9'
-
-    #<space>
-    tabel_transisi['q9', ' '] = 'q10'
-    tabel_transisi['q10', ' '] = 'q10'
-
-    #<variabel>
-    for i in variable:
-        tabel_transisi['q10', str(i)] = 'q11'
-
-    tabel_transisi['q10', 'p'] = 'q41'
-    tabel_transisi['q41', 'r'] = 'q42'
-    tabel_transisi['q42', 'i'] = 'q43'
-    tabel_transisi['q43', 'n'] = 'q44'
-    tabel_transisi['q44', 't'] = 'q45'
-    tabel_transisi['q45', '('] = 'q47'
-
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q47', str(i)] = 'q48'
-    for i in variable:
-        tabel_transisi['q47', str(i)] = 'q48'
-    
-    tabel_transisi['q48', ')'] = 'q49'
-    tabel_transisi['q49', ' '] = 'q50'
-    tabel_transisi['q50', '#'] = 'accept'
-    tabel_transisi['q50', ' '] = 'q10'
-    
-    #<space>
-    tabel_transisi['q11', ' '] = 'q12'
-
-    #< = >
-    tabel_transisi['q12', '='] = 'q13'
-
-    #<space>
-    tabel_transisi['q13', ' '] = 'q14'
-
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q14', str(i)] = 'q15'
-    for i in variable:
-        tabel_transisi['q14', str(i)] = 'q15'
-    
-    #<space>
-    tabel_transisi['q15', ' '] = 'q16'
-
-    #<arithmetic>
-    for i in arithmetic:
-        if i == '/' or i == '*' :
-            tabel_transisi['q16', i] = 'q17'
-            tabel_transisi['q17', i] = 'q17'
-        tabel_transisi['q16', i] = 'q17'
-
-    #<space>
-    tabel_transisi['q17', ' '] = 'q18'
-    
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q18', str(i)] = 'q19'
-    for i in variable:
-        tabel_transisi['q18', str(i)] = 'q19'
-    
-    #<space + #>
-    tabel_transisi['q19', ' '] = 'q20'
-    tabel_transisi['q20', '#'] = 'accept'
-    tabel_transisi['q20', ' '] = 'q10'
-    
-    # lexical analisis\
-    st.write("""
-    ##### Hasil Parse
-    """)
-    n =  0
-    idx_char = 0
-    state = 'q0'
-    token_ygSekarang = ''
-    while state != 'accept':
-        titik_Sekarang = input_string[idx_char]
-        token_ygSekarang += titik_Sekarang
-        state = tabel_transisi[(state, titik_Sekarang)]
-        #   st.write(n, input_string[idx_char])
-        n = n+1
-        if state == 'error':
-            return False
-        idx_char = idx_char + 1
-    if state == 'accept':
-        return True
-
-def ParserAnalyzer(kalimat,Parser,FA):
-    input_string = str(kalimat.lower()+' #')
-
-    # initialization
-    list_input = list(string.ascii_lowercase)
-    list_state = ['q0','q00', 'q01', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8',
-                  'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 'q16',
-                  'q17', 'q18', 'q19', 'q20', 'q21', 'q22', 'q23', 'q24',
-                  'q25', 'q26', 'q27', 'q28', 'q29', 'q30', 'q31', 'q32',
-                  'q33', 'q34', 'q35', 'q36', 'q37', 'q38', 'q39', 'q40', 
-                  'q41', 'q42', 'q43', 'q44', 'q45', 'q46', 'q47', 'q48',
-                  'q49', 'q50', 'q51', 'q52', 'q53', 'q54', 'q55', 'q56']
-
-    variable = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    arithmetic = ['+','-','*','/','%']
-    angka = ['0','1','2','3','4','5','6','7','8','9']
-    simbol = ['<','>','=','!']
-
-    tabel_transisi = {}
-    for state in list_state:
-        for alphabet in list_input:
-            tabel_transisi[(state, alphabet)] = 'error'
-        tabel_transisi[(state, '#')] = 'error'
-        tabel_transisi[(state, ' ')] = 'error'
-
-    # kalo ada spasi sebelum input
-    tabel_transisi['q0', ' '] = 'q0'
-
-    #<while>
-    tabel_transisi['q0', 'w'] = 'q00'
-    tabel_transisi['q00', 'h'] = 'q01'
-    tabel_transisi['q01', 'i'] = 'q00'
-    tabel_transisi['q00', 'l'] = 'q01'
-    tabel_transisi['q01', 'e'] = 'q1'
-
-    #<space>
-    tabel_transisi['q1', ' '] = 'q1'
-    
-    #<variabel>
-    for i in variable:
-        tabel_transisi['q1', str(i)] = 'q2'
-
-    #<True>
-    tabel_transisi['q1', 't'] = 'q32'
-    tabel_transisi['q32', 'r'] = 'q31'
-    tabel_transisi['q31', 'u'] = 'q32'
-    tabel_transisi['q32', 'e'] = 'q31'
-    tabel_transisi['q31', ' '] = 'q6'
-    #<False>
-    tabel_transisi['q1', 'f'] = 'q32'
-    tabel_transisi['q32', 'a'] = 'q31'
-    tabel_transisi['q31', 'l'] = 'q32'
-    tabel_transisi['q32', 's'] = 'q31'
-    tabel_transisi['q31', 'e'] = 'q32'
-    tabel_transisi['q32', ' '] = 'q6'
-
-    #<space>      
-    tabel_transisi['q2', ' '] = 'q2'
-
-    #<operator> 
-    for i in simbol:
-        if i == '=' or i == '!':
-            tabel_transisi['q2', str(i)] = 'q34'
-            for i in simbol :
-                tabel_transisi['q34', str(i)] = 'q4'                
-        elif i == '<' or i == '>':
-            tabel_transisi['q2', '<'] = 'q4'
-            tabel_transisi['q2', '>'] = 'q4'
-            tabel_transisi['q4', '='] = 'q4'
-        else:
-            tabel_transisi['q2', str(i)] = 'q4'
-
-    #<space>
-    tabel_transisi['q4', ' '] = 'q4'
-
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q4', str(i)] = 'q6'
-    for i in variable:
-        tabel_transisi['q4', str(i)] = 'q6'
-    
-    #<space>
-    tabel_transisi['q6', ' '] = 'q6'
-    
-    #<do>
-    tabel_transisi['q6', 'd'] = 'q8'
-    tabel_transisi['q6', ':'] = 'q9'
-    tabel_transisi['q8', 'o'] = 'q9'
-
-    #<space>
-    tabel_transisi['q9', ' '] = 'q10'
-    tabel_transisi['q10', ' '] = 'q10'
-
-    #<variabel>
-    for i in variable:
-        tabel_transisi['q10', str(i)] = 'q11'
-
-    tabel_transisi['q10', 'p'] = 'q41'
-    tabel_transisi['q41', 'r'] = 'q42'
-    tabel_transisi['q42', 'i'] = 'q43'
-    tabel_transisi['q43', 'n'] = 'q44'
-    tabel_transisi['q44', 't'] = 'q45'
-    tabel_transisi['q45', ' '] = 'q45'
-    tabel_transisi['q45', '('] = 'q47'
-
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q47', str(i)] = 'q48'
-    for i in variable:
-        tabel_transisi['q47', str(i)] = 'q48'
-    
-    tabel_transisi['q48', ')'] = 'q49'
-    tabel_transisi['q49', ' '] = 'q50'
-    tabel_transisi['q50', '#'] = 'accept'
-    tabel_transisi['q50', ' '] = 'q10'
-    
-    #<space>
-    tabel_transisi['q11', ' '] = 'q12'
-
-    #< = >
-    tabel_transisi['q12', '='] = 'q13'
-
-    #<space>
-    tabel_transisi['q13', ' '] = 'q14'
-
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q14', str(i)] = 'q15'
-    for i in variable:
-        tabel_transisi['q14', str(i)] = 'q15'
-    
-    #<space>
-    tabel_transisi['q15', ' '] = 'q16'
-
-    #<arithmetic>
-    for i in arithmetic:
-        if i == '/' or i == '*' :
-            tabel_transisi['q16', i] = 'q17'
-            tabel_transisi['q17', i] = 'q17'
-        tabel_transisi['q16', i] = 'q17'
-
-    #<space>
-    tabel_transisi['q17', ' '] = 'q18'
-    
-    #<angka>/<variabel>
-    for i in angka:
-        tabel_transisi['q18', str(i)] = 'q19'
-    for i in variable:
-        tabel_transisi['q18', str(i)] = 'q19'
-    
-    #<space + #>
-    tabel_transisi['q19', ' '] = 'q20'
-    tabel_transisi['q20', '#'] = 'accept'
-    tabel_transisi['q20', ' '] = 'q10'
-    
-    # lexical analisis\
-    idx_char = 0
-    state = 'q0'
-    token_ygSekarang = ''
-    while state != 'accept':
-        titik_Sekarang = input_string[idx_char]
-        token_ygSekarang += titik_Sekarang
-        state = tabel_transisi[(state, titik_Sekarang)]
-        if FA[:-1] != state:
-            if titik_Sekarang == ' ' : Parser.append('space')
-            else: Parser.append(titik_Sekarang)
-            FA.append(state)
-        if state == 'error':
-            return False, Parser, FA
-        idx_char = idx_char + 1
-    if state == 'accept':
-        return True, Parser, FA
-
-css = r'''
-    <style>
-        [data-testid="stForm"] {border: 0px}
-    </style>
-'''
 def add_bg_from_url():
     st.markdown(
          f"""
          <style>
          .stApp {{
-             background-image: url("https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701389101.jpg");
+             #background-image: url("https://images.pexels.com/photos/7235085/pexels-photo-7235085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
              background-attachment: fixed;
              background-size: cover
          }}
@@ -376,62 +64,268 @@ def add_bg_from_url():
      )
 add_bg_from_url() 
 
-
-# st.write("""
-# ##### Parsing Code 1 Line
-# """)
-
-# with st.form("my_form"):
-#    hasil = st.text_input("Copas Hasil Code Kesini (1 Line)","while a < 1 : a = a * b")
-#    submitted = st.form_submit_button("Ini Tombol Submit")
-# try:
-#     if lexicalAnalyzer(hasil) :
-#         st.success("Anda Benar")
-#     else:
-#         st.success("Kamu Salah")
-# except:
-#     st.success("Kamu Jelek")
-
-# st.text("\n")
-
-
 st.write("""
-##### Parsing Code Umum
+# Test Voice
 """)
-Parser = []
-FA = []
-with st.form("my_form2"):   
-    txt = st.text_area("Copas Code kesini", "while a < 1 :\n     print(a)\n     a = b + c")
-    txt = txt.replace("\n",'')
-    submitted = st.form_submit_button("Ini Tombol Submit")
-try:
-    if ParserAnalyzer(txt, Parser, FA)[0] :
-        st.success("Anda Benar")
-    else:
-        st.success("Kamu Salah")
-except:
-    st.success("Kamu Salah")
-
-st.write("""
-##### Hasil Parse
-""")
-
-list_of_tuples = list(zip(FA, Parser))
-df = pd.DataFrame(
-    list_of_tuples, columns=['State', 'Parse']
-    )
-st.table(df)
-
-# i = 0
-# for i in range(len(FA)):
-#     st.write(i,FA[i], Parser[i])
-# a = Parser[0]
-# for i in Parser[1:-1]:
-#     if i != 'space' :
-#         a = a + i 
-#     else: a = a + " <space> "
-# st.markdown(a)
+st.title("Anggap aja chat")
 
 
+from playsound import playsound
+import speech_recognition as sr
+from deep_translator import GoogleTranslator
+from gtts import gTTS
+import os
+import sys 
+#import wikipedia
+from streamlit_chat import message
+import requests
+import bs4
+flag = 0
 
-st.text(" Grammar: \n<statement> ::= while <kondisi> : <aksi> endwhile \n<kondisi> ::= <variabel> <operator> <variabel/angka>\n<kondisi> ::= true | false\n<aksi> ::= <variabel> = <variabel/angka> <arithmetic> <variabel/angka>\n<aksi> ::= print(<variabel/angka>)\n<variabel> ::= a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z\n<angka> ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 \n<arithmetic> ::= + | - | * | / | % | ** | //\n<operator> ::= == | >= | <= | < | > | != | ==")
+#with st.container():
+# input_user = ''
+# input_user = st.text_input("User Input:", on_change=on_input_change, key="user_input")
+# if input_user != '':
+# 	message(input_user)
+####################################
+dic = ('afrikaans', 'af', 'albanian', 'sq',
+	'amharic', 'am', 'arabic', 'ar',
+	'armenian', 'hy', 'azerbaijani', 'az',
+	'basque', 'eu', 'belarusian', 'be',
+	'bengali', 'bn', 'bosnian', 'bs', 'bulgarian',
+	'bg', 'catalan', 'ca', 'cebuano',
+	'ceb', 'chichewa', 'ny', 'chinese (simplified)',
+	'zh-cn', 'chinese (traditional)',
+	'zh-tw', 'corsican', 'co', 'croatian', 'hr',
+	'czech', 'cs', 'danish', 'da', 'dutch',
+	'nl', 'english', 'en', 'esperanto', 'eo',
+	'estonian', 'et', 'filipino', 'tl', 'finnish',
+	'fi', 'french', 'fr', 'frisian', 'fy', 'galician',
+	'gl', 'georgian', 'ka', 'german',
+	'de', 'greek', 'el', 'gujarati', 'gu',
+	'haitian creole', 'ht', 'hausa', 'ha',
+	'hawaiian', 'haw', 'hebrew', 'he', 'hindi',
+	'hi', 'hmong', 'hmn', 'hungarian',
+	'hu', 'icelandic', 'is', 'igbo', 'ig', 'indonesian',
+	'id', 'irish', 'ga', 'italian',
+	'it', 'japanese', 'ja', 'javanese', 'jw',
+	'kannada', 'kn', 'kazakh', 'kk', 'khmer',
+	'km', 'korean', 'ko', 'kurdish (kurmanji)',
+	'ku', 'kyrgyz', 'ky', 'lao', 'lo',
+	'latin', 'la', 'latvian', 'lv', 'lithuanian',
+	'lt', 'luxembourgish', 'lb',
+	'macedonian', 'mk', 'malagasy', 'mg', 'malay',
+	'ms', 'malayalam', 'ml', 'maltese',
+	'mt', 'maori', 'mi', 'marathi', 'mr', 'mongolian',
+	'mn', 'myanmar (burmese)', 'my',
+	'nepali', 'ne', 'norwegian', 'no', 'odia', 'or',
+	'pashto', 'ps', 'persian', 'fa',
+	'polish', 'pl', 'portuguese', 'pt', 'punjabi',
+	'pa', 'romanian', 'ro', 'russian',
+	'ru', 'samoan', 'sm', 'scots gaelic', 'gd',
+	'serbian', 'sr', 'sesotho', 'st',
+	'shona', 'sn', 'sindhi', 'sd', 'sinhala', 'si',
+	'slovak', 'sk', 'slovenian', 'sl',
+	'somali', 'so', 'spanish', 'es', 'sundanese',
+	'su', 'swahili', 'sw', 'swedish',
+	'sv', 'tajik', 'tg', 'tamil', 'ta', 'telugu',
+	'te', 'thai', 'th', 'turkish',
+	'tr', 'ukrainian', 'uk', 'urdu', 'ur', 'uyghur',
+	'ug', 'uzbek', 'uz',
+	'vietnamese', 'vi', 'welsh', 'cy', 'xhosa', 'xh',
+	'yiddish', 'yi', 'yoruba',
+	'yo', 'zulu', 'zu')
+query = ''
+
+def scrap_Lama(pencarian):
+	text= pencarian
+	url = 'https://google.com/search?q=' + text
+
+	# Fetch the URL data using requests.get(url),
+	# store it in a variable, request_result.
+	request_result=requests.get( url )
+
+
+	# Creating soup from the fetched request
+	soup = bs4.BeautifulSoup(request_result.text,"html.parser")
+
+
+	# soup.find.all( h3 ) to grab
+	# all major headings of our search result,
+	summary=soup.find_all( 'h3' )
+	hasil = []
+	for info in summary:
+		print(info)
+		print("---------")
+		hasil.append(info.getText())
+
+	print(hasil)
+	return hasil
+
+def scrap(pencarian):
+	import requests
+	import urllib
+	import pandas as pd
+	from requests_html import HTML
+	from requests_html import HTMLSession
+
+	def get_source(url):
+		"""Return the source code for the provided URL. 
+
+		Args: 
+			url (string): URL of the page to scrape.
+
+		Returns:
+			response (object): HTTP response object from requests_html. 
+		"""
+
+		try:
+			session = HTMLSession()
+			response = session.get(url)
+			return response
+
+		except requests.exceptions.RequestException as e:
+			print(e)    
+
+	def get_results(query):
+		
+		query = urllib.parse.quote_plus(query)
+		response = get_source("https://www.google.co.uk/search?q=" + query)
+		
+		return response
+
+	def parse_results(response):
+		
+		css_identifier_result = ".tF2Cxc"
+		css_identifier_title = "h3"
+		css_identifier_link = ".yuRUbf a"
+		css_identifier_text = ".VwiC3b"
+		
+		results = response.html.find(css_identifier_result)
+
+		output = []
+		
+		for result in results:
+
+			item = {
+				'title': result.find(css_identifier_title, first=True).text,
+				'link': result.find(css_identifier_link, first=True).attrs['href'],
+				'text': result.find(css_identifier_text, first=True).text
+			}
+			
+			output.append(item)
+			
+		return output
+
+	def google_search(query):
+		response = get_results(query)
+		return parse_results(response)
+
+	hasil = google_search(pencarian)
+
+	output = []
+	for values in hasil[0].values() :
+		output.append(values) 
+	#print(output)
+
+	return output
+
+
+def DisplayJwbBot(jawaban):
+	with st.chat_message("assistant"):
+		st.markdown(jawaban, unsafe_allow_html=True)
+
+def takecommand():
+	r = sr.Recognizer()
+	with sr.Microphone() as source:
+		print("listening.....")
+		st.text("listening.....")
+		r.pause_threshold = 1
+		audio = r.listen(source)
+	try:
+		print("Recognizing.....")
+		st.text("Recognizing.....")
+		query = r.recognize_google(audio, language='id')
+		print(f"The User said {query}\n")
+	except Exception as e:
+		print("say that again please.....")
+		st.text("say that again please.....")
+		speak = gTTS(text="Please repeat the question", lang='en-in', slow=False)
+		speak.save("captured_voice.mp3")
+		playsound('captured_voice.mp3')
+		os.remove('captured_voice.mp3')
+		return "None"
+	return query
+
+
+if "messages" not in st.session_state:
+	st.session_state.messages = []
+
+for message in st.session_state.messages:
+	with st.chat_message(message["role"]):
+		st.markdown(message["content"], unsafe_allow_html=True)
+
+if prompt := st.chat_input("What is up?"):
+	# Display user message in chat message container
+	st.chat_message("user").markdown(prompt)
+	# Add user message to chat history
+	st.session_state.messages.append({"role": "user", "content": prompt})
+
+	response = f"Echo: {prompt}"
+	# Display assistant response in chat message container
+	# with st.chat_message("assistant"):
+	# 	st.markdown(response)
+	# Add assistant response to chat history
+	st.session_state.messages.append({"role": "assistant", "content": response})
+	
+	query = prompt
+	to_lang = 'en-in'
+	list_hasil = []
+	list_hasil = scrap(query)
+	hasil = list_hasil[0]
+
+	print(query + '?')
+	
+	#message(query + '?', is_user=True)
+	DisplayJwbBot(query + '?')
+	st.session_state.messages.append({"role": "user", "content": query + '?'})
+	
+	#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
+
+	print(list_hasil)
+	img_path = get_LinkFirstImage(query)
+
+
+	#message(list_hasil[0])
+	DisplayJwbBot(list_hasil[0])
+	st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
+	
+
+
+	deskripsi = list_hasil[2] + "baca Selengkapnya "+ list_hasil[1]
+	#message(deskripsi)
+	DisplayJwbBot(deskripsi)
+	st.session_state.messages.append({"role": "assistant", "content": deskripsi})
+	speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
+	speak.save("captured_voice.mp3")
+	playsound('captured_voice.mp3')
+	os.remove('captured_voice.mp3')
+
+	# message(
+	# 			f'<img width="100%" height="200" src="{img_path}"/>', 
+	# 			key=f"{random.randint(100,1000)}", 
+	# 			allow_html=True
+	# 		)
+	DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
+	st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
+
+	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
+
+	linkYT = get_LinkYT(query)
+	# message(
+	# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
+	# 			key=f"{random.randint(100,1000)}",
+	# 			allow_html=True
+	# 		)
+	DisplayJwbBot(f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
+	st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
