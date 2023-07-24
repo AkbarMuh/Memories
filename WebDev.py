@@ -59,7 +59,7 @@ st.write("""
 st.title("Anggap aja chat")
 
 
-import speech_recognition as sr
+#import speech_recognition as sr
 from deep_translator import GoogleTranslator
 from gtts import gTTS
 import os
@@ -222,29 +222,6 @@ def scrap(pencarian):
 def DisplayJwbBot(jawaban):
 	with st.chat_message("assistant"):
 		st.markdown(jawaban, unsafe_allow_html=True)
-
-def takecommand():
-	r = sr.Recognizer()
-	with sr.Microphone() as source:
-		print("listening.....")
-		st.text("listening.....")
-		r.pause_threshold = 1
-		audio = r.listen(source)
-	try:
-		print("Recognizing.....")
-		st.text("Recognizing.....")
-		query = r.recognize_google(audio, language='id')
-		print(f"The User said {query}\n")
-	except Exception as e:
-		print("say that again please.....")
-		st.text("say that again please.....")
-		speak = gTTS(text="Please repeat the question", lang='en-in', slow=False)
-		speak.save("captured_voice.mp3")
-		#playsound('captured_voice.mp3')
-		os.remove('captured_voice.mp3')
-		return "None"
-	return query
-
 
 if "messages" not in st.session_state:
 	st.session_state.messages = []
