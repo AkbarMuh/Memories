@@ -4,39 +4,53 @@ import pandas as pd
 import numpy as np
 import streamlit.components.v1 as components
 import random
-#from selenium import webdriver
-#from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
+import requests
+from bs4 import BeautifulSoup
 
+def on_btn_click():
+    del st.session_state.messages[:]
 
-# def get_LinkYT(cari_pidio):
-# 	driver = webdriver.Chrome()
-# 	driver.implicitly_wait(5)
+def get_LinkYT(cari_pidio):
+	driver = webdriver.Chrome()
+	driver.implicitly_wait(5)
 
-# 	#search_query = input().split()
-# 	search_query = cari_pidio.split(	)
-# 	print(search_query)
-# 	final_query = ''
-# 	link = []
-# 	for word in search_query:
-# 		final_query += word + "+"
+	#search_query = input().split()
+	search_query = cari_pidio.split(	)
+	print(search_query)
+	final_query = ''
+	link = []
+	for word in search_query:
+		final_query += word + "+"
 		
-# 	driver.get('https://www.youtube.com/results?search_query={}'.format(final_query))
-# 	select = driver.find_element(By.CSS_SELECTOR, 'div#contents ytd-item-section-renderer>div#contents a#thumbnail')
-# 	link += [select.get_attribute('href')]
+	driver.get('https://www.youtube.com/results?search_query={}'.format(final_query))
+	select = driver.find_element(By.CSS_SELECTOR, 'div#contents ytd-item-section-renderer>div#contents a#thumbnail')
+	link += [select.get_attribute('href')]
 
-# 	print(link)
-# 	linked = link[0]
-# 	try:
-# 		linked = linked.split("/")[4]
-# 	except :
-# 		linked = linked.split("/")[3]
-# 		linked = linked.split("=",1)[1]
-# 		linked = linked.split("&",1)[0]
-# 	linked = "https://www.youtube.com/embed/" + linked
-# 	print(linked)
+	print(link)
+	linked = link[0]
+	try:
+		linked = linked.split("/")[4]
+	except :
+		linked = linked.split("/")[3]
+		linked = linked.split("=",1)[1]
+		linked = linked.split("&",1)[0]
+	linked = "https://www.youtube.com/embed/" + linked
+	print(linked)
 
-# 	return linked
+	return linked
+
+def get_LinkFirstImage(cari_poto):
+	word = cari_poto
+	url = 'https://www.google.com/search?q={0}&tbm=isch'.format(word)
+	content = requests.get(url).content
+	soup = BeautifulSoup(content,'lxml')
+	images = soup.findAll('img')
+
+	print(images[1].get('src'))
+	return images[1].get('src')
 
 def add_bg_from_url():
     st.markdown(
@@ -59,9 +73,16 @@ st.write("""
 st.title("Anggap aja chat")
 
 
-
+from playsound import playsound
+import speech_recognition as sr
+from deep_translator import GoogleTranslator
+from gtts import gTTS
+import os
+import sys 
+#import wikipedia
 from streamlit_chat import message
-
+import requests
+import bs4
 flag = 0
 
 #with st.container():
@@ -118,6 +139,31 @@ dic = ('afrikaans', 'af', 'albanian', 'sq',
 	'yiddish', 'yi', 'yoruba',
 	'yo', 'zulu', 'zu')
 query = ''
+
+def scrap_Lama(pencarian):
+	text= pencarian
+	url = 'https://google.com/search?q=' + text
+
+	# Fetch the URL data using requests.get(url),
+	# store it in a variable, request_result.
+	request_result=requests.get( url )
+
+
+	# Creating soup from the fetched request
+	soup = bs4.BeautifulSoup(request_result.text,"html.parser")
+
+
+	# soup.find.all( h3 ) to grab
+	# all major headings of our search result,
+	summary=soup.find_all( 'h3' )
+	hasil = []
+	for info in summary:
+		print(info)
+		print("---------")
+		hasil.append(info.getText())
+
+	print(hasil)
+	return hasil
 
 def scrap(pencarian):
 	import requests
@@ -192,6 +238,7 @@ def DisplayJwbBot(jawaban):
 	with st.chat_message("assistant"):
 		st.markdown(jawaban, unsafe_allow_html=True)
 
+
 if "messages" not in st.session_state:
 	st.session_state.messages = []
 
@@ -199,7 +246,8 @@ for message in st.session_state.messages:
 	with st.chat_message(message["role"]):
 		st.markdown(message["content"], unsafe_allow_html=True)
 
-if prompt := st.chat_input("What is up?"):
+
+if prompt := st.chat_input("Silakan ketik pertanyaan anda?"):
 	# Display user message in chat message container
 	st.chat_message("user").markdown(prompt)
 	# Add user message to chat history
@@ -221,29 +269,126 @@ if prompt := st.chat_input("What is up?"):
 	print(query + '?')
 	
 	#message(query + '?', is_user=True)
-	DisplayJwbBot(query + '?')
+	
 	st.session_state.messages.append({"role": "user", "content": query + '?'})
 	
 	#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
 
 	print(list_hasil)
-	#img_path = get_LinkFirstImage(query)
+	img_path = get_LinkFirstImage(query)
 
 
 	#message(list_hasil[0])
-	DisplayJwbBot(list_hasil[0])
+	
 	st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
 	
 
 
 	deskripsi = list_hasil[2] + "baca Selengkapnya "+ list_hasil[1]
 	#message(deskripsi)
-	DisplayJwbBot(deskripsi)
+	
 	st.session_state.messages.append({"role": "assistant", "content": deskripsi})
-	#speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
-	#speak.save("captured_voice.mp3")
+	speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
+	speak.save("captured_voice.mp3")
 	#playsound('captured_voice.mp3')
-	#os.remove('captured_voice.mp3')
+	os.remove('captured_voice.mp3')
+
+	# message(
+	# 			f'<img width="100%" height="200" src="{img_path}"/>', 
+	# 			key=f"{random.randint(100,1000)}", 
+	# 			allow_html=True
+	# 		)
+	
+	st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
+
+	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
+
+	linkYT = get_LinkYT(query)
+	# message(
+	# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
+	# 			key=f"{random.randint(100,1000)}",
+	# 			allow_html=True
+	# 		)
+	
+	st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
+	
+	DisplayJwbBot(query + '?')
+	DisplayJwbBot(list_hasil[0])
+	DisplayJwbBot(deskripsi)
+	DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
+	DisplayJwbBot(f'<iframe width="400" height="400" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
+
+def takecommand():
+	r = sr.Recognizer()
+	with sr.Microphone() as source:
+		print("listening.....")
+		st.text("listening.....")
+		r.pause_threshold = 1
+		audio = r.listen(source)
+	try:
+		print("Recognizing.....")
+		st.text("Recognizing.....")
+		query = r.recognize_google(audio, language='id')
+		print(f"Kamu Ngomong {query}\n")
+		st.text(f"Kamu Ngomong {query}\n")
+	except Exception as e:
+		print("say that again please.....")
+		st.text("say that again please.....")
+		speak = gTTS(text="Please repeat the question", lang='en-in', slow=False)
+		speak.save("captured_voice.mp3")
+		playsound('captured_voice.mp3')
+		os.remove('captured_voice.mp3')
+		return "None"
+	return query
+
+def on_btn_mic():
+    # Display user message in chat message container
+	prompt = takecommand()
+	while (prompt == "None"):
+		prompt = takecommand()
+	#st.chat_message("user").markdown(prompt)
+	# Add user message to chat history
+	st.session_state.messages.append({"role": "user", "content": prompt})
+
+	response = f"Echo: {prompt}"
+	# Display assistant response in chat message container
+	# with st.chat_message("assistant"):
+	# 	st.markdown(response)
+	# Add assistant response to chat history
+	st.session_state.messages.append({"role": "assistant", "content": response})
+	
+	query = prompt
+	to_lang = 'en-in'
+	list_hasil = []
+	list_hasil = scrap(query)
+	hasil = list_hasil[0]
+
+	print(query + '?')
+	
+	#message(query + '?', is_user=True)
+	#DisplayJwbBot(query + '?')
+	st.session_state.messages.append({"role": "user", "content": query + '?'})
+	
+	#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
+
+	print(list_hasil)
+	img_path = get_LinkFirstImage(query)
+
+
+	#message(list_hasil[0])
+	#DisplayJwbBot(list_hasil[0])
+	st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
+	
+
+
+	deskripsi = list_hasil[2] + "baca Selengkapnya "+ list_hasil[1]
+	#message(deskripsi)
+	#DisplayJwbBot(deskripsi)
+	st.session_state.messages.append({"role": "assistant", "content": deskripsi})
+	speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
+	speak.save("captured_voice.mp3")
+	#playsound('captured_voice.mp3')
+	os.remove('captured_voice.mp3')
 
 	# message(
 	# 			f'<img width="100%" height="200" src="{img_path}"/>', 
@@ -251,15 +396,19 @@ if prompt := st.chat_input("What is up?"):
 	# 			allow_html=True
 	# 		)
 	#DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
-	#st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
+	st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
 
 	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
 
-	#linkYT = get_LinkYT(query)
+	linkYT = get_LinkYT(query)
 	# message(
 	# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
 	# 			key=f"{random.randint(100,1000)}",
 	# 			allow_html=True
 	# 		)
 	#DisplayJwbBot(f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
-	#st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
+	st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
+
+
+st.button("Clear message", on_click=on_btn_click)
+st.button("Ini Tombol buat Mic", on_click=on_btn_mic)
