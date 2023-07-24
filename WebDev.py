@@ -59,7 +59,6 @@ st.write("""
 st.title("Anggap aja chat")
 
 
-from gtts import gTTS
 import os
 import sys 
 #import wikipedia
