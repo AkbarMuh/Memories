@@ -61,8 +61,7 @@ st.title("Anggap aja chat")
 
 
 from streamlit_chat import message
-import requests
-import bs4
+
 flag = 0
 
 #with st.container():
@@ -119,31 +118,6 @@ dic = ('afrikaans', 'af', 'albanian', 'sq',
 	'yiddish', 'yi', 'yoruba',
 	'yo', 'zulu', 'zu')
 query = ''
-
-def scrap_Lama(pencarian):
-	text= pencarian
-	url = 'https://google.com/search?q=' + text
-
-	# Fetch the URL data using requests.get(url),
-	# store it in a variable, request_result.
-	request_result=requests.get( url )
-
-
-	# Creating soup from the fetched request
-	soup = bs4.BeautifulSoup(request_result.text,"html.parser")
-
-
-	# soup.find.all( h3 ) to grab
-	# all major headings of our search result,
-	summary=soup.find_all( 'h3' )
-	hasil = []
-	for info in summary:
-		print(info)
-		print("---------")
-		hasil.append(info.getText())
-
-	print(hasil)
-	return hasil
 
 def scrap(pencarian):
 	import requests
@@ -266,10 +240,10 @@ if prompt := st.chat_input("What is up?"):
 	#message(deskripsi)
 	DisplayJwbBot(deskripsi)
 	st.session_state.messages.append({"role": "assistant", "content": deskripsi})
-	speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
-	speak.save("captured_voice.mp3")
+	#speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
+	#speak.save("captured_voice.mp3")
 	#playsound('captured_voice.mp3')
-	os.remove('captured_voice.mp3')
+	#os.remove('captured_voice.mp3')
 
 	# message(
 	# 			f'<img width="100%" height="200" src="{img_path}"/>', 
