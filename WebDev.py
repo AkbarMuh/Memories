@@ -52,20 +52,20 @@ def get_LinkFirstImage(cari_poto):
 	print(images[1].get('src'))
 	return images[1].get('src')
 
-def add_bg_from_url():
-    st.markdown(
-         f"""
-         <style>
-         .stApp {{
-             #background-image: url("https://images.pexels.com/photos/7235085/pexels-photo-7235085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
-             background-attachment: fixed;
-             background-size: cover
-         }}
-         </style>
-         """,
-         unsafe_allow_html=True
-     )
-add_bg_from_url() 
+# def add_bg_from_url():
+#     st.markdown(
+#          f"""
+#          <style>
+#          .stApp {{
+#              #background-image: url("https://images.pexels.com/photos/7235085/pexels-photo-7235085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+#              background-attachment: fixed;
+#              background-size: cover
+#          }}
+#          </style>
+#          """,
+#          unsafe_allow_html=True
+#      )
+# add_bg_from_url() 
 
 st.write("""
 # Test Voice
