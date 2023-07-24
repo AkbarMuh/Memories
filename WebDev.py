@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 import streamlit.components.v1 as components
 import random
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+#from selenium import webdriver
+#from selenium.webdriver.common.by import By
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,34 +13,34 @@ from bs4 import BeautifulSoup
 def on_btn_click():
     del st.session_state.messages[:]
 
-def get_LinkYT(cari_pidio):
-	driver = webdriver.Chrome()
-	driver.implicitly_wait(5)
+# def get_LinkYT(cari_pidio):
+# 	driver = webdriver.Chrome()
+# 	driver.implicitly_wait(5)
 
-	#search_query = input().split()
-	search_query = cari_pidio.split(	)
-	print(search_query)
-	final_query = ''
-	link = []
-	for word in search_query:
-		final_query += word + "+"
+# 	#search_query = input().split()
+# 	search_query = cari_pidio.split(	)
+# 	print(search_query)
+# 	final_query = ''
+# 	link = []
+# 	for word in search_query:
+# 		final_query += word + "+"
 		
-	driver.get('https://www.youtube.com/results?search_query={}'.format(final_query))
-	select = driver.find_element(By.CSS_SELECTOR, 'div#contents ytd-item-section-renderer>div#contents a#thumbnail')
-	link += [select.get_attribute('href')]
+# 	driver.get('https://www.youtube.com/results?search_query={}'.format(final_query))
+# 	select = driver.find_element(By.CSS_SELECTOR, 'div#contents ytd-item-section-renderer>div#contents a#thumbnail')
+# 	link += [select.get_attribute('href')]
 
-	print(link)
-	linked = link[0]
-	try:
-		linked = linked.split("/")[4]
-	except :
-		linked = linked.split("/")[3]
-		linked = linked.split("=",1)[1]
-		linked = linked.split("&",1)[0]
-	linked = "https://www.youtube.com/embed/" + linked
-	print(linked)
+# 	print(link)
+# 	linked = link[0]
+# 	try:
+# 		linked = linked.split("/")[4]
+# 	except :
+# 		linked = linked.split("/")[3]
+# 		linked = linked.split("=",1)[1]
+# 		linked = linked.split("&",1)[0]
+# 	linked = "https://www.youtube.com/embed/" + linked
+# 	print(linked)
 
-	return linked
+# 	return linked
 
 def get_LinkFirstImage(cari_poto):
 	word = cari_poto
@@ -51,21 +51,6 @@ def get_LinkFirstImage(cari_poto):
 
 	print(images[1].get('src'))
 	return images[1].get('src')
-
-# def add_bg_from_url():
-#     st.markdown(
-#          f"""
-#          <style>
-#          .stApp {{
-#              #background-image: url("https://images.pexels.com/photos/7235085/pexels-photo-7235085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
-#              background-attachment: fixed;
-#              background-size: cover
-#          }}
-#          </style>
-#          """,
-#          unsafe_allow_html=True
-#      )
-# add_bg_from_url() 
 
 st.write("""
 # Test Voice
@@ -303,20 +288,20 @@ if prompt := st.chat_input("Silakan ketik pertanyaan anda?"):
 
 	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
 
-	linkYT = get_LinkYT(query)
+	#linkYT = get_LinkYT(query)
 	# message(
 	# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
 	# 			key=f"{random.randint(100,1000)}",
 	# 			allow_html=True
 	# 		)
 	
-	st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
+	#st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
 	
 	DisplayJwbBot(query + '?')
 	DisplayJwbBot(list_hasil[0])
 	DisplayJwbBot(deskripsi)
 	DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
-	DisplayJwbBot(f'<iframe width="400" height="400" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
+	#DisplayJwbBot(f'<iframe width="400" height="400" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
 
 def takecommand():
 	r = sr.Recognizer()
@@ -400,14 +385,14 @@ def on_btn_mic():
 
 	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
 
-	linkYT = get_LinkYT(query)
+	#linkYT = get_LinkYT(query)
 	# message(
 	# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
 	# 			key=f"{random.randint(100,1000)}",
 	# 			allow_html=True
 	# 		)
 	#DisplayJwbBot(f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
-	st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
+	#st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
 
 
 st.button("Clear message", on_click=on_btn_click)
