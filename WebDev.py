@@ -59,9 +59,7 @@ st.write("""
 st.title("Anggap aja chat")
 
 
-import os
-import sys 
-#import wikipedia
+
 from streamlit_chat import message
 import requests
 import bs4
