@@ -59,8 +59,6 @@ st.write("""
 st.title("Anggap aja chat")
 
 
-#import speech_recognition as sr
-#from deep_translator import GoogleTranslator
 from gtts import gTTS
 import os
 import sys 
