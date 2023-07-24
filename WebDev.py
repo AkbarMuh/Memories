@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 import streamlit.components.v1 as components
 import random
-#from selenium import webdriver
-#from selenium.webdriver.common.by import By
 
 import requests
 from bs4 import BeautifulSoup
