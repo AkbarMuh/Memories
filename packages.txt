@@ -1,1 +1,13 @@
-
+streamlit
+pandas
+numpy
+streamlit.components.v1
+playsound
+speech_recognition
+gTTS
+os
+streamlit_chat
+requests
+bs4
+requests
+BeautifulSoup
