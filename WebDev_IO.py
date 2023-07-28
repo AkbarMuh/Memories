@@ -378,6 +378,15 @@ def find_between( s, first, last ):
     except ValueError:
         return ""	
 
+
+def on_btn_click():
+	del st.session_state.messages[:]
+def on_refresh():
+	from streamlit_js_eval import streamlit_js_eval
+	streamlit_js_eval(js_expressions="parent.window.location.reload()")
+def on_btn_warning():
+	st.warning('Maaf Pertanyaan anda diluar konteks', icon="⚠️")
+
 menu_selected = option_menu(None, ["Chat", "Home", 'Settings'], 
     icons=['chat', 'house', 'gear'], 
     menu_icon="cast", default_index=0, orientation="horizontal")
@@ -559,11 +568,7 @@ if menu_selected == 'Chat':
 	# 			return "None"
 	# 		return query
 	
-	def on_btn_click():
-		del st.session_state.messages[:]
-	def on_refresh():
-		from streamlit_js_eval import streamlit_js_eval
-		streamlit_js_eval(js_expressions="parent.window.location.reload()")
+
 	# def on_btn_mic():
 	# 		# Display user message in chat message container
 	# 		prompt = takecommand()
@@ -638,8 +643,6 @@ if menu_selected == 'Chat':
 	# 		st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
 	
 	
-	def on_btn_warning():
-		st.warning('Maaf Pertanyaan anda diluar konteks', icon="⚠️")\
 			
 	st.button("Clear message", on_click=on_btn_click)
 	#st.button("Ini Tombol buat Mic", on_click=on_btn_mic)
@@ -649,4 +652,8 @@ if menu_selected == 'Chat':
 if menu_selected == "Settings" :
 	st.markdown("<h1 style='text-align: center; color: white;'>Hai</h1>", unsafe_allow_html=True)
 	st.info('Ini inpo', icon="ℹ️")
+	st.button("Clear message", on_click=on_btn_click)
+	#st.button("Ini Tombol buat Mic", on_click=on_btn_mic)
+	st.button("Ini Tombol buat Test warning", on_click=on_btn_warning)
+	st.button("Ini Tombol buat Test Refresh", on_click=on_refresh)
 
