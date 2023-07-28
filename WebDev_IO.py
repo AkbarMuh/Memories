@@ -654,6 +654,5 @@ if menu_selected == "Settings" :
 	st.info('Ini inpo', icon="ℹ️")
 	st.button("Clear message", on_click=on_btn_click)
 	#st.button("Ini Tombol buat Mic", on_click=on_btn_mic)
-	st.button("Ini Tombol buat Test warning", on_click=on_btn_warning)
 	st.button("Ini Tombol buat Test Refresh", on_click=on_refresh)
 
