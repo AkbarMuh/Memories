@@ -14,3 +14,4 @@ requests-html==0.10.0
 beautifulsoup4==4.12.2
 deep-translator==1.11.4
 langdetect==1.0.9
+youtube-search==2.1.2
