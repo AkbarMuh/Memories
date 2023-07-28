@@ -191,7 +191,7 @@ def chatgpt4free(pencarian):
 	import sys
 	sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 	import streamlit as st
-	from gpt4free import deepai
+	from gpt4free import you,deepai
 	def get_answer(question: str) -> str:
 		# Set cloudflare clearance cookie and get answer from GPT-4 model
 		try:
@@ -561,7 +561,9 @@ if menu_selected == 'Chat':
 	
 	def on_btn_click():
 		del st.session_state.messages[:]
-	
+	def on_refresh():
+		from streamlit_js_eval import streamlit_js_eval
+		streamlit_js_eval(js_expressions="parent.window.location.reload()")
 	# def on_btn_mic():
 	# 		# Display user message in chat message container
 	# 		prompt = takecommand()
@@ -642,6 +644,7 @@ if menu_selected == 'Chat':
 	st.button("Clear message", on_click=on_btn_click)
 	#st.button("Ini Tombol buat Mic", on_click=on_btn_mic)
 	st.button("Ini Tombol buat Test warning", on_click=on_btn_warning)
+	st.button("Ini Tombol buat Test Refresh", on_click=on_refresh)
 		
 if menu_selected == "Settings" :
 	st.markdown("<h1 style='text-align: center; color: white;'>Hai</h1>", unsafe_allow_html=True)
