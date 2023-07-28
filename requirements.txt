@@ -1,14 +1,23 @@
-streamlit
-pandas
-numpy
+streamlit==1.24.1
+streamlit-bokeh-events==0.1.2
+streamlit-chat @ https://github.com/AI-Yash/st-chat/archive/refs/pull/24/head.zip#sha256=018c7b60a8a200eb23394ea309ced518f36c446612f74c788c309526a124eeba
+streamlit-custom-notification-box==0.1.2
+streamlit-option-menu==0.3.6
+
+pandas==1.5.3
+numpy==1.24.3
 streamlit.components.v1
 by glob 'streamlit.components.v1'
 by regex 'streamlit.components.v1'
-playsound
+playsound==1.2.2
 speech_recognition
-gTTS
+gTTS==2.3.2
+gTTS-token==1.1.4
+
 os
-streamlit_chat
-requests
-bs4
-BeautifulSoup
+
+regex==2023.6.3
+requests==2.31.0
+requests-html==0.10.0
+
+beautifulsoup4==4.12.2
