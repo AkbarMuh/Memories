@@ -6,7 +6,6 @@ streamlit-option-menu==0.3.6
 pandas==1.5.3
 numpy==1.24.3
 playsound==1.2.2
-speech_recognition
 gTTS==2.3.2
 gTTS-token==1.1.4
 regex==2023.6.3
