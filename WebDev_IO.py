@@ -201,7 +201,7 @@ def chatgpt4free(pencarian):
 			
 			#model deep ai
 			result = ''
-			for chunk in deepai.Completion.create("Act as a animal museum guide and your name is Alice. Pada museum ini terdapat hewan-hewan indonesia. "+question):
+			for chunk in deepai.Completion.create("Act as a animal museum guide and your name is Memories. Pada museum ini terdapat hewan-hewan indonesia. "+question):
 				#print(chunk, end="", flush=True)
 				result = result + chunk
 			print(result)
