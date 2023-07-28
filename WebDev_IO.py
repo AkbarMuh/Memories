@@ -6,7 +6,7 @@ import random
 import requests
 from bs4 import BeautifulSoup
 from playsound import playsound
-import speech_recognition as sr
+#import speech_recognition as sr
 from deep_translator import GoogleTranslator
 from streamlit_option_menu import option_menu
 from gtts import gTTS
@@ -532,115 +532,116 @@ if menu_selected == 'Chat':
 		play_audio(audio_path2)
 		
 
-	def takecommand():
-			r = sr.Recognizer()
-			with sr.Microphone() as source:
-				playsound('sfxgoogle.mp3')
-				#custom_notification_box(icon='info', textDisplay='listening.....', externalLink='more info', url='#', styles=styles, key="foo")
-				print("listening.....")
-				st.text("listening.....")
-				r.pause_threshold = 1
-				audio = r.listen(source)
-			try:
-				print("Recognizing.....")
-				#custom_notification_box(icon='info', textDisplay='Recognizing.....', externalLink='more info', url='#', styles=styles, key="fo2")
-				st.text("Recognizing.....")
-				query = r.recognize_google(audio, language='id')
-				print(f"Kamu Ngomong {query}\n")
-				#custom_notification_box(icon='info', textDisplay=f"Kamu Ngomong {query}\n", externalLink='more info', url='#', styles=styles, key="fo21")
-				#st.text(f"Kamu Ngomong {query}\n")
-			except Exception as e:
-				print("Tolong ulangi.....")
-				#custom_notification_box(icon='info', textDisplay='Tolong ulangi.....', externalLink='more info', url='#', styles=styles, key="fo3")
-				st.text("say that again please.....")
-				speak = gTTS(text="Please repeat the question", lang='en-in', slow=False)
-				speak.save("captured_voice.mp3")
-				playsound('captured_voice.mp3')
-				os.remove('captured_voice.mp3')
-				return "None"
-			return query
+	# def takecommand():
+	# 		r = sr.Recognizer()
+	# 		with sr.Microphone() as source:
+	# 			playsound('sfxgoogle.mp3')
+	# 			#custom_notification_box(icon='info', textDisplay='listening.....', externalLink='more info', url='#', styles=styles, key="foo")
+	# 			print("listening.....")
+	# 			st.text("listening.....")
+	# 			r.pause_threshold = 1
+	# 			audio = r.listen(source)
+	# 		try:
+	# 			print("Recognizing.....")
+	# 			#custom_notification_box(icon='info', textDisplay='Recognizing.....', externalLink='more info', url='#', styles=styles, key="fo2")
+	# 			st.text("Recognizing.....")
+	# 			query = r.recognize_google(audio, language='id')
+	# 			print(f"Kamu Ngomong {query}\n")
+	# 			#custom_notification_box(icon='info', textDisplay=f"Kamu Ngomong {query}\n", externalLink='more info', url='#', styles=styles, key="fo21")
+	# 			#st.text(f"Kamu Ngomong {query}\n")
+	# 		except Exception as e:
+	# 			print("Tolong ulangi.....")
+	# 			#custom_notification_box(icon='info', textDisplay='Tolong ulangi.....', externalLink='more info', url='#', styles=styles, key="fo3")
+	# 			st.text("say that again please.....")
+	# 			speak = gTTS(text="Please repeat the question", lang='en-in', slow=False)
+	# 			speak.save("captured_voice.mp3")
+	# 			playsound('captured_voice.mp3')
+	# 			os.remove('captured_voice.mp3')
+	# 			return "None"
+	# 		return query
 	
 	def on_btn_click():
 		del st.session_state.messages[:]
-	def on_btn_mic():
-			# Display user message in chat message container
-			prompt = takecommand()
-			while (prompt == "None"):
-				prompt = takecommand()
-			#st.chat_message("user").markdown(prompt)
-			# Add user message to chat history
-			st.session_state.messages.append({"role": "user", "content": prompt})
+	
+	# def on_btn_mic():
+	# 		# Display user message in chat message container
+	# 		prompt = takecommand()
+	# 		while (prompt == "None"):
+	# 			prompt = takecommand()
+	# 		#st.chat_message("user").markdown(prompt)
+	# 		# Add user message to chat history
+	# 		st.session_state.messages.append({"role": "user", "content": prompt})
 			
-			query = prompt
-			to_lang = 'en-in'
-			list_hasil = []
-			try:
-				list_hasil = scrap(query)
-			except:
-				list_hasil = ['Tidak ditemukan','404 Not Found','404 Not Found']
-			hasil = list_hasil[0]
+	# 		query = prompt
+	# 		to_lang = 'en-in'
+	# 		list_hasil = []
+	# 		try:
+	# 			list_hasil = scrap(query)
+	# 		except:
+	# 			list_hasil = ['Tidak ditemukan','404 Not Found','404 Not Found']
+	# 		hasil = list_hasil[0]
 
-			print(query + '?')
+	# 		print(query + '?')
 			
-			#message(query + '?', is_user=True)
+	# 		#message(query + '?', is_user=True)
 			
-			st.session_state.messages.append({"role": "user", "content": query + '?'})
+	# 		st.session_state.messages.append({"role": "user", "content": query + '?'})
 			
-			#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
+	# 		#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
 
-			print(list_hasil)
-			img_path = get_LinkFirstImage(query)
+	# 		print(list_hasil)
+	# 		img_path = get_LinkFirstImage(query)
 
 
-			#message(list_hasil[0])
+	# 		#message(list_hasil[0])
 			
-			st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
+	# 		st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
 			
 
 
-			deskripsi = list_hasil[2] + " baca Selengkapnya "+ list_hasil[1]
-			kodeSuara = str(random.randint(10000000000,1000000000000000000))
-			kodeSuara2 = str(random.randint(10000000000,1000000000000000000))
-			st.session_state.messages.append({"role": "assistant", "content": deskripsi})
-			#hasilgpt = GoogleTranslator(source='auto', target='id').translate(testModelGpt4all(GoogleTranslator(source='auto', target='english').translate(query)))
-			hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(query))
-			speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
-			speak2 = gTTS(text="Menurut AI " + hasilgpt, lang=to_lang, slow=False)
-			audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
-			audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
-			speak.save(audio_path)
-			speak2.save(audio_path2)
+	# 		deskripsi = list_hasil[2] + " baca Selengkapnya "+ list_hasil[1]
+	# 		kodeSuara = str(random.randint(10000000000,1000000000000000000))
+	# 		kodeSuara2 = str(random.randint(10000000000,1000000000000000000))
+	# 		st.session_state.messages.append({"role": "assistant", "content": deskripsi})
+	# 		#hasilgpt = GoogleTranslator(source='auto', target='id').translate(testModelGpt4all(GoogleTranslator(source='auto', target='english').translate(query)))
+	# 		hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(query))
+	# 		speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
+	# 		speak2 = gTTS(text="Menurut AI " + hasilgpt, lang=to_lang, slow=False)
+	# 		audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
+	# 		audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
+	# 		speak.save(audio_path)
+	# 		speak2.save(audio_path2)
 
-			# message(
-			# 			f'<img width="100%" height="200" src="{img_path}"/>', 
-			# 			key=f"{random.randint(100,1000)}", 
-			# 			allow_html=True
-			# 		)
-			st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path}"></audio>'})
-			st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
+	# 		# message(
+	# 		# 			f'<img width="100%" height="200" src="{img_path}"/>', 
+	# 		# 			key=f"{random.randint(100,1000)}", 
+	# 		# 			allow_html=True
+	# 		# 		)
+	# 		st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path}"></audio>'})
+	# 		st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
 
-			#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
+	# 		#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
 			
 		
-			#linkYT = get_LinkYT(query)
-			# message(
-			# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
-			# 			key=f"{random.randint(100,1000)}",
-			# 			allow_html=True
-			# 		)
+	# 		#linkYT = get_LinkYT(query)
+	# 		# message(
+	# 		# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
+	# 		# 			key=f"{random.randint(100,1000)}",
+	# 		# 			allow_html=True
+	# 		# 		)
 			
-			#st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
+	# 		#st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
 			
-			#hasilgpt = GoogleTranslator(source='auto', target='id').translate(testModelGpt4all(GoogleTranslator(source='auto', target='english').translate(query)))
-			st.session_state.messages.append({"role": "assistant", "content": hasilgpt})
-			st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
+	# 		#hasilgpt = GoogleTranslator(source='auto', target='id').translate(testModelGpt4all(GoogleTranslator(source='auto', target='english').translate(query)))
+	# 		st.session_state.messages.append({"role": "assistant", "content": hasilgpt})
+	# 		st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
 	
 	
 	def on_btn_warning():
 		st.warning('Maaf Pertanyaan anda diluar konteks', icon="⚠️")\
 			
 	st.button("Clear message", on_click=on_btn_click)
-	st.button("Ini Tombol buat Mic", on_click=on_btn_mic)
+	#st.button("Ini Tombol buat Mic", on_click=on_btn_mic)
 	st.button("Ini Tombol buat Test warning", on_click=on_btn_warning)
 		
 if menu_selected == "Settings" :
