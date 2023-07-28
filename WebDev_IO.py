@@ -419,7 +419,6 @@ if menu_selected == "Home" :
 		st.write(' ')
 
 if menu_selected == 'Chat':
-	message("hai tayo", is_user=True)
 	if "messages" not in st.session_state:
 		st.session_state.messages = []
 
