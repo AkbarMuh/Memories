@@ -191,7 +191,7 @@ def chatgpt4free(pencarian):
 	import sys
 	sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 	import streamlit as st
-	from gpt4free import you,deepai
+	from gpt4free import deepai
 	def get_answer(question: str) -> str:
 		# Set cloudflare clearance cookie and get answer from GPT-4 model
 		try:
