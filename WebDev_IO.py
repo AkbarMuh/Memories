@@ -215,9 +215,9 @@ def chatgpt4free(pencarian):
 
 	answer = get_answer(pencarian)
 	escaped = answer.encode('utf-8').decode('unicode-escape')
-	while '[[' in escaped:
-		link = find_between(escaped,'[[',')')
-		escaped = escaped.replace('[['+link+')','')
+	#while '[[' in escaped:
+	#	link = find_between(escaped,'[[',')')
+	#	escaped = escaped.replace('[['+link+')','')
 	return escaped
 
 # def scrap_Lama(pencarian):
