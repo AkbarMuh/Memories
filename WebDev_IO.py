@@ -501,17 +501,18 @@ if menu_selected == 'Chat':
 			
 		speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
 		speak2 = gTTS(text="Menurut AI " + hasilgpt, lang=to_lang, slow=False)
-		#audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
-		#audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
-		#speak.save(audio_path)
-		#speak2.save(audio_path2)
+		audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
+		audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
+		speak.save(audio_path)
+		speak2.save(audio_path2)
 
 		# message(
 		# 			f'<img width="100%" height="200" src="{img_path}"/>', 
 		# 			key=f"{random.randint(100,1000)}", 
 		# 			allow_html=True
 		# 		)
-		#st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path}"></audio>'})
+		
+		st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path}"></audio>'})
 		st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
 
 		#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
@@ -528,16 +529,16 @@ if menu_selected == 'Chat':
 		
 		#hasilgpt = GoogleTranslator(source='auto', target='id').translate(testModelGpt4all(GoogleTranslator(source='auto', target='english').translate(query)))
 		st.session_state.messages.append({"role": "assistant", "content": hasilgpt})
-		#st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
+		st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
 
 		DisplayJwbBot(query + '?')
 		DisplayJwbBot(list_hasil[0])
 		DisplayJwbBot(deskripsi)
-		#play_audio(audio_path)
+		play_audio(audio_path)
 		DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
 		DisplayJwbBot(f'<iframe width="400" height="400" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
 		DisplayJwbBot(hasilgpt)
-		#play_audio(audio_path2)
+		play_audio(audio_path2)
 		
 
 	# def takecommand():
