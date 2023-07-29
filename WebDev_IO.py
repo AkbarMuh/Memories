@@ -538,7 +538,7 @@ if menu_selected == 'Chat':
 		DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
 		DisplayJwbBot(f'<iframe width="400" height="400" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
 		DisplayJwbBot(hasilgpt)
-		play_audio(audio_path2)
+		autoplay_audio(audio_path2)
 		
 
 	# def takecommand():
