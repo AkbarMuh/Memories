@@ -448,13 +448,14 @@ if menu_selected == 'Chat':
 
 		#message(list_hasil[0])
 		
-		st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
+		#st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
 		
 
 
 		deskripsi = list_hasil[2] + " baca Selengkapnya "+ list_hasil[1]
 		kodeSuara = str(random.randint(10000000000,1000000000000000000))
 		kodeSuara2 = str(random.randint(10000000000,1000000000000000000))
+		deskripsi = list_hasil[0] + "\n" + deskripsi
 		st.session_state.messages.append({"role": "assistant", "content": deskripsi})
 		#hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(query)) # kalau mau translate dulu
 		#prompt = "Act as Museum Guide with name memories. Museum ini adalah museum Hewan. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema hewan jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut "
@@ -504,7 +505,7 @@ if menu_selected == 'Chat':
 		st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
 
 		DisplayJwbBot(query + '?')
-		DisplayJwbBot(list_hasil[0])
+		#DisplayJwbBot(list_hasil[0])
 		DisplayJwbBot(deskripsi)
 		play_audio(audio_path)
 		DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
