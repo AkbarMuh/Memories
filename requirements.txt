@@ -16,3 +16,5 @@ deep-translator==1.11.4
 langdetect==1.0.9
 youtube-search==2.1.2
 streamlit-js-eval==0.1.5
+pydantic==2.1.1
+pydantic_core==2.4.0
