@@ -269,10 +269,20 @@ def scrap(pencarian):
 		return parse_results(response)
 
 	hasil = google_search(pencarian)
-
 	output = []
-	for values in hasil[0].values() :
-		output.append(values) 
+	panjang = 0
+	for values in hasil :
+		#print(len(list(values.values())[2].split()))
+		if len(list(values.values())[2].split()) > panjang:
+			output = list(values.values())
+			panjang = len(list(values.values())[2])
+		#print(list(values.values()))
+	if output[2][0:2].isdigit() and output[2][9].isdigit() :
+		s = output[2]
+		s = s[s.find(' — '):]
+		s = s[3:]
+		output[2] = s
+
 	#print(output)
 
 	return output
