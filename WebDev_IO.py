@@ -137,53 +137,6 @@ styles = {'material-icons':{'color': 'red'},
 # if input_user != '':
 # 	message(input_user)
 ####################################
-dic = ('afrikaans', 'af', 'albanian', 'sq',
-	'amharic', 'am', 'arabic', 'ar',
-	'armenian', 'hy', 'azerbaijani', 'az',
-	'basque', 'eu', 'belarusian', 'be',
-	'bengali', 'bn', 'bosnian', 'bs', 'bulgarian',
-	'bg', 'catalan', 'ca', 'cebuano',
-	'ceb', 'chichewa', 'ny', 'chinese (simplified)',
-	'zh-cn', 'chinese (traditional)',
-	'zh-tw', 'corsican', 'co', 'croatian', 'hr',
-	'czech', 'cs', 'danish', 'da', 'dutch',
-	'nl', 'english', 'en', 'esperanto', 'eo',
-	'estonian', 'et', 'filipino', 'tl', 'finnish',
-	'fi', 'french', 'fr', 'frisian', 'fy', 'galician',
-	'gl', 'georgian', 'ka', 'german',
-	'de', 'greek', 'el', 'gujarati', 'gu',
-	'haitian creole', 'ht', 'hausa', 'ha',
-	'hawaiian', 'haw', 'hebrew', 'he', 'hindi',
-	'hi', 'hmong', 'hmn', 'hungarian',
-	'hu', 'icelandic', 'is', 'igbo', 'ig', 'indonesian',
-	'id', 'irish', 'ga', 'italian',
-	'it', 'japanese', 'ja', 'javanese', 'jw',
-	'kannada', 'kn', 'kazakh', 'kk', 'khmer',
-	'km', 'korean', 'ko', 'kurdish (kurmanji)',
-	'ku', 'kyrgyz', 'ky', 'lao', 'lo',
-	'latin', 'la', 'latvian', 'lv', 'lithuanian',
-	'lt', 'luxembourgish', 'lb',
-	'macedonian', 'mk', 'malagasy', 'mg', 'malay',
-	'ms', 'malayalam', 'ml', 'maltese',
-	'mt', 'maori', 'mi', 'marathi', 'mr', 'mongolian',
-	'mn', 'myanmar (burmese)', 'my',
-	'nepali', 'ne', 'norwegian', 'no', 'odia', 'or',
-	'pashto', 'ps', 'persian', 'fa',
-	'polish', 'pl', 'portuguese', 'pt', 'punjabi',
-	'pa', 'romanian', 'ro', 'russian',
-	'ru', 'samoan', 'sm', 'scots gaelic', 'gd',
-	'serbian', 'sr', 'sesotho', 'st',
-	'shona', 'sn', 'sindhi', 'sd', 'sinhala', 'si',
-	'slovak', 'sk', 'slovenian', 'sl',
-	'somali', 'so', 'spanish', 'es', 'sundanese',
-	'su', 'swahili', 'sw', 'swedish',
-	'sv', 'tajik', 'tg', 'tamil', 'ta', 'telugu',
-	'te', 'thai', 'th', 'turkish',
-	'tr', 'ukrainian', 'uk', 'urdu', 'ur', 'uyghur',
-	'ug', 'uzbek', 'uz',
-	'vietnamese', 'vi', 'welsh', 'cy', 'xhosa', 'xh',
-	'yiddish', 'yi', 'yoruba',
-	'yo', 'zulu', 'zu')
 query = ''
 
 def chatgpt4free(pencarian):
@@ -191,21 +144,30 @@ def chatgpt4free(pencarian):
 	import sys
 	sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 	import streamlit as st
-	from gpt4free import deepai
+	from gpt4free import you,deepai
 	def get_answer(question: str) -> str:
 		# Set cloudflare clearance cookie and get answer from GPT-4 model
 		try:
 			# model you
-			#result = you.Completion.create(prompt=question)
-			#return result.text
+			response = you.Completion.create(
+			prompt=question,
+			detailed=False,
+			count=1,page=1,
+			include_links=False,)
+			#result = you.Completion.create(response)
+			print(response.text)
+			return response.text
 			
 			#model deep ai
-			result = ''
-			for chunk in deepai.Completion.create("Act as a animal museum guide and your name is Memories. Pada museum ini terdapat hewan-hewan indonesia. "+question):
-				#print(chunk, end="", flush=True)
-				result = result + chunk
-			print(result)
-			return result
+			# result = ''
+			# messages = [
+			# 	{"role": "system", "content": "Act as Museum Guide dan namamu adalah is memories. Museum ini adalah museum sejarah indonesia. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema sejarah indonesia jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut"},
+			# 	{"role": "user", "content": question}
+			# 	]
+			# for chunk in deepai.Completion.create("Act as Museum Guide dan namamu adalah is memories. Museum ini adalah museum sejarah indonesia. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema sejarah indonesia jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut "+ question):
+			# 	result = result + chunk
+			# print(result)
+			# return result
 
 		except Exception as e:
 			# Return error message if an exception occurs
@@ -215,9 +177,9 @@ def chatgpt4free(pencarian):
 
 	answer = get_answer(pencarian)
 	escaped = answer.encode('utf-8').decode('unicode-escape')
-	#while '[[' in escaped:
-	#	link = find_between(escaped,'[[',')')
-	#	escaped = escaped.replace('[['+link+')','')
+	while '[[' in escaped:
+		link = find_between(escaped,'[[',')')
+		escaped = escaped.replace('[['+link+')','')
 	return escaped
 
 # def scrap_Lama(pencarian):
@@ -289,14 +251,16 @@ def scrap(pencarian):
 		output = []
 		
 		for result in results:
-
-			item = {
-				'title': result.find(css_identifier_title, first=True).text,
-				'link': result.find(css_identifier_link, first=True).attrs['href'],
-				'text': result.find(css_identifier_text, first=True).text
-			}
+			try:
+				item = {
+					'title': result.find(css_identifier_title, first=True).text,
+					'link': result.find(css_identifier_link, first=True).attrs['href'],
+					'text': result.find(css_identifier_text, first=True).text
+				}
 			
-			output.append(item)
+				output.append(item)
+			except:
+				pass
 			
 		return output
 
@@ -493,12 +457,20 @@ if menu_selected == 'Chat':
 		kodeSuara2 = str(random.randint(10000000000,1000000000000000000))
 		st.session_state.messages.append({"role": "assistant", "content": deskripsi})
 		#hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(query)) # kalau mau translate dulu
-		hasilgpt = chatgpt4free(query)
+		#prompt = "Act as Museum Guide with name memories. Museum ini adalah museum Hewan. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema hewan jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut "
+		prompt = "Act as Animal Museum Guide with your name is memories. "
+		hasilgpt = chatgpt4free(prompt + query)
+		# coba 1
 		if detect(hasilgpt) != 'id':
+			hasilgpt = hasilgpt.replace("Memories","Alice")
 			hasilgpt = GoogleTranslator(source='auto', target='id').translate(hasilgpt)
+			hasilgpt = hasilgpt.replace("Alice","Memories")
+		# coba 2
 		if "Tidak dapat mengambil tanggapan" in hasilgpt:
 			hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(GoogleTranslator(source='auto', target='en').translate(query)))
-			
+		# coba 3
+		if "Tidak dapat mengambil tanggapan" in hasilgpt:
+			hasilgpt = deskripsi
 		speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
 		speak2 = gTTS(text="Menurut AI " + hasilgpt, lang=to_lang, slow=False)
 		audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
