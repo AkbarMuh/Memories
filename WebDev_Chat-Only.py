@@ -6,7 +6,7 @@ import random
 import requests
 from bs4 import BeautifulSoup
 from playsound import playsound
-import speech_recognition as sr
+#import speech_recognition as sr
 from deep_translator import GoogleTranslator
 from streamlit_option_menu import option_menu
 from gtts import gTTS
@@ -17,7 +17,6 @@ import requests
 import bs4
 import base64
 from langdetect import detect
-import toml
 flag = 0
 
 st.set_page_config(
