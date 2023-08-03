@@ -480,8 +480,8 @@ if menu_selected == 'Chat':
 		if "Tidak dapat mengambil tanggapan" in hasilgpt:
 			hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(GoogleTranslator(source='auto', target='en').translate(query)))
 		# coba 3
-		if "Tidak dapat mengambil tanggapan" in hasilgpt:
-			hasilgpt = deskripsi
+			if "Tidak dapat mengambil tanggapan" in hasilgpt:
+				hasilgpt = deskripsi
 		speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
 		speak2 = gTTS(text="Menurut AI " + hasilgpt, lang=to_lang, slow=False)
 		audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
