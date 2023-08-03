@@ -434,8 +434,8 @@ if prompt := st.chat_input("Silakan ketik pertanyaan anda?"):
 	if "Tidak dapat mengambil tanggapan, Coba lagi." == hasilgpt:
 		hasilgpt = chatgpt4free(query)
 	# coba 3
-		if "Tidak dapat mengambil tanggapan" in hasilgpt:
-			hasilgpt = deskripsi
+		#if "Tidak dapat mengambil tanggapan" in hasilgpt:
+		#	hasilgpt = deskripsi
 	
 	speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang=to_lang, slow=False)
 	speak2 = gTTS(text="Menurut AI " + hasilgpt, lang=to_lang, slow=False)
