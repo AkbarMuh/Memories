@@ -810,8 +810,29 @@ if menu_selected == "Json" :
 				st.text(i)
 	displayPDF("FineTune.txt")
 		
-if menu_selected == "Settings" :
+if menu_selected == "Setting?" :
 	st.markdown("<h1 style='text-align: center; color: white;'>Hai</h1>", unsafe_allow_html=True)
+	import streamlit as st
+	from audiorecorder import audiorecorder
+
+	st.title("Audio Recorder")
+	audio = audiorecorder("Click to record", "Recording...")
+
+	if len(audio) > 0:
+		# To play audio in frontend:
+		st.audio(audio.tobytes())
+		
+		# To save audio to a file:
+		wav_file = open("input.AIFF", "wb")
+		wav_file.write(audio.tobytes())
+	
+		harvard = sr.AudioFile('input.AIFF')
+		with harvard as source:
+			audio = r.record(source, duration=4)
+
+		print(r.recognize_google(audio))
+	
+
 
 
 import time
