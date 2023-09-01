@@ -33,4 +33,3 @@ flask
 flask-cors
 httpx==0.13.3
 SpeechRecognition==3.8.1
-PyAudio==0.2.13
