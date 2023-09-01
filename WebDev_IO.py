@@ -543,7 +543,7 @@ if menu_selected == 'Chat':
 			#from elevenlabs import clone, generate, play, set_api_key, save
 			#from elevenlabs.api import History
 
-			set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
+			#set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
 
 			# voice = clone(
 			#     name="Voice Name",
