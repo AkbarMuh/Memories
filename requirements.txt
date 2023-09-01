@@ -31,3 +31,4 @@ js2py
 quickjs
 flask
 flask-cors
+httpx==0.13.3
