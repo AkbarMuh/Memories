@@ -372,7 +372,7 @@ def find_between( s, first, last ):
         return ""	
 
 
-menu_selected = option_menu(None, ["Chat", "Home", 'History', 'Json','Setting?'], 
+menu_selected = option_menu(None, ["Chat", "Home", 'History', 'Json','Audio?'], 
     icons=['chat', 'house', 'clock-history', 'filetype-json', 'gear'], 
     menu_icon="cast", default_index=0, orientation="horizontal",manual_select=False)
 
@@ -540,8 +540,8 @@ if menu_selected == 'Chat':
 			audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
 			audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
 			
-			from elevenlabs import clone, generate, play, set_api_key, save
-			from elevenlabs.api import History
+			#from elevenlabs import clone, generate, play, set_api_key, save
+			#from elevenlabs.api import History
 
 			set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
 
@@ -628,150 +628,9 @@ if menu_selected == 'Chat':
 			DisplayJwbBot(hasilgpt)
 			play_audio(audio_path2)
 
-
-		def takecommand():
-				r = sr.Recognizer()
-				with sr.Microphone() as source:
-					playsound('sfxgoogle.mp3')
-					#custom_notification_box(icon='info', textDisplay='listening.....', externalLink='more info', url='#', styles=styles, key="foo")
-					print("listening.....")
-					st.text("listening.....")
-					r.pause_threshold = 1
-					audio = r.listen(source)
-				try:
-					print("Recognizing.....")
-					#custom_notification_box(icon='info', textDisplay='Recognizing.....', externalLink='more info', url='#', styles=styles, key="fo2")
-					st.text("Recognizing.....")
-					query = r.recognize_google(audio, language='id')
-					print(f"Kamu Ngomong {query}\n")
-					#custom_notification_box(icon='info', textDisplay=f"Kamu Ngomong {query}\n", externalLink='more info', url='#', styles=styles, key="fo21")
-					#st.text(f"Kamu Ngomong {query}\n")
-				except Exception as e:
-					print("Tolong ulangi.....")
-					#custom_notification_box(icon='info', textDisplay='Tolong ulangi.....', externalLink='more info', url='#', styles=styles, key="fo3")
-					st.text("say that again please.....")
-					speak = gTTS(text="Please repeat the question", lang='id', slow=False)
-					speak.save("captured_voice.mp3")
-					playsound('captured_voice.mp3')
-					os.remove('captured_voice.mp3')
-					return "None"
-				return query
 		
 		def on_btn_click():
 			del st.session_state.messages[:]
-		def on_btn_mic():
-				# Display user message in chat message container
-				prompt = takecommand()
-				while (prompt == "None"):
-					prompt = takecommand()
-				#st.chat_message("user").markdown(prompt)
-				# Add user message to chat history
-				st.session_state.messages.append({"role": "user", "content": prompt})
-				
-				query = prompt
-				to_lang = 'en'
-				list_hasil = []
-				try:
-					list_hasil = scrap(query)
-				except:
-					list_hasil = ['Hasil Tidak ditemukan','','Artikel Tidak tersedia']
-				hasil = list_hasil[0]
-
-				print(query + '?')
-
-				#message(query + '?', is_user=True)
-
-				#st.session_state.messages.append({"role": "user", "content": query + '?'})
-
-				#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
-
-				print(list_hasil)
-				img_path = get_LinkFirstImage(query)
-
-
-				#message(list_hasil[0])
-
-				#st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
-
-
-
-				deskripsi = list_hasil[2] + " baca Selengkapnya "+ list_hasil[1]
-				kodeSuara = str(random.randint(10000000000,1000000000000000000))
-				kodeSuara2 = str(random.randint(10000000000,1000000000000000000))
-				deskripsi = list_hasil[0] + "\n" + deskripsi
-				#st.session_state.messages.append({"role": "assistant", "content": deskripsi})
-				#hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(query)) # kalau mau translate dulu
-				#prompt = "Act as Museum Guide with name memories. Museum ini adalah museum Hewan. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema hewan jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut "
-				#prompt = "answer in one paragraph"
-				hasilgpt = chatgpt4free(prompt + query)
-				# coba 1
-				if detect(hasilgpt) != 'id':
-					hasilgpt = hasilgpt.replace("Memories","Alice")
-					hasilgpt = GoogleTranslator(source='auto', target='id').translate(hasilgpt)
-					hasilgpt = hasilgpt.replace("Alice","Memories")
-				# coba 2
-				if "Tidak dapat mengambil tanggapan, Coba lagi." == hasilgpt:
-					hasilgpt = chatgpt4free(query)
-				# coba 3
-					if "Tidak dapat mengambil tanggapan" in hasilgpt or "Unable to fetch the response" in hasilgpt :
-						hasilgpt = deskripsi
-				
-				speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang="id", slow=False)
-				speak2 = gTTS(text="" + hasilgpt, lang="id", slow=False)
-				audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
-				audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
-				
-				from elevenlabs import clone, generate, play, set_api_key, save
-				from elevenlabs.api import History
-
-				set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
-
-				# voice = clone(
-				#     name="Voice Name",
-				#     description="An old American male voice with a slight hoarseness in his throat. Perfect for news.",
-				#     files=["./sample1.mp3", "./sample2.mp3"],
-				# )
-
-				# speak2 = generate(
-				# text=hasilgpt,
-				# voice="Bella",
-				# model="eleven_multilingual_v2"
-				# )
-				
-				# save(speak2, audio_path2)
-
-				# speak.save(audio_path)
-				speak2.save(audio_path2)
-				
-
-				# message(
-				# 			f'<img width="100%" height="200" src="{img_path}"/>', 
-				# 			key=f"{random.randint(100,1000)}", 
-				# 			allow_html=True
-				# 		)
-				with open('readme.txt', 'w') as f:
-					f.write(img_path)
-				#st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path}"></audio>'})
-				st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
-
-				#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
-
-
-				linkYT = get_LinkYT(query)
-				# message(
-				# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
-				# 			key=f"{random.randint(100,1000)}",
-				# 			allow_html=True
-				# 		)
-
-				st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
-
-				#hasilgpt = GoogleTranslator(source='auto', target='id').translate(testModelGpt4all(GoogleTranslator(source='auto', target='english').translate(query)))
-				st.session_state.messages.append({"role": "assistant", "content": hasilgpt})
-				st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
-
-
-
 		def on_refresh():
 			from streamlit_js_eval import streamlit_js_eval
 			streamlit_js_eval(js_expressions="parent.window.location.reload()")	
@@ -810,7 +669,7 @@ if menu_selected == "Json" :
 				st.text(i)
 	displayPDF("FineTune.txt")
 		
-if menu_selected == "Setting?" :
+if menu_selected == "Audio?" :
 	st.markdown("<h1 style='text-align: center; color: white;'>Hai</h1>", unsafe_allow_html=True)
 	import streamlit as st
 	from audiorecorder import audiorecorder
@@ -825,13 +684,6 @@ if menu_selected == "Setting?" :
 		# To save audio to a file:
 		wav_file = open("input.AIFF", "wb")
 		wav_file.write(audio.tobytes())
-	
-		harvard = sr.AudioFile('input.AIFF')
-		with harvard as source:
-			audio = r.record(source, duration=4)
-
-		print(r.recognize_google(audio))
-	
 
 
 
