@@ -32,3 +32,4 @@ quickjs
 flask
 flask-cors
 httpx==0.13.3
+SpeechRecognition==3.8.1
