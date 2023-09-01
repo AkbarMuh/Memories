@@ -20,3 +20,14 @@ pydantic==2.1.1
 pydantic_core==2.4.0
 retrying==1.3.4
 tls-client==0.2.1
+requests
+pycryptodome
+curl_cffi
+aiohttp
+certifi
+browser_cookie3
+websockets
+js2py
+quickjs
+flask
+flask-cors
