@@ -770,7 +770,7 @@ if menu_selected == "Audio?" :
 			hasil = gpt5(output)
 			st.text(hasil)
 
-			speak = gTTS(text=output+ ". /n" + hasil, lang="id", slow=False)
+			speak = gTTS(text="" + hasil, lang="id", slow=False)
 			audio_path = "./suara/"+current_time+".mp3"
 			speak.save(audio_path)
 			st.audio(audio_path)
