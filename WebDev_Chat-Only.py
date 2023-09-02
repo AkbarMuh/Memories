@@ -734,7 +734,7 @@ if menu_selected == "Json" :
 	displayPDF("FineTune.txt")
 		
 if menu_selected == "Audio?" :
-	st.markdown("<h1 style='text-align: center; color: white;'>Hai</h1>", unsafe_allow_html=True)
+	st.markdown("<h1 style='text-align: center; color: white;'>Voice Recognizer</h1>", unsafe_allow_html=True)
 	import streamlit as st
 	from audiorecorder import audiorecorder
 	gpt = st.checkbox('Dengan AI ?')
