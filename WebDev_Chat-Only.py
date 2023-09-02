@@ -743,7 +743,7 @@ if menu_selected == "Audio?" :
 
 	if len(audio) > 0:
 		# To play audio in frontend:
-		st.audio(audio.tobytes())
+		#st.audio(audio.tobytes())
 		
 		# To save audio to a file:
 		wav_file = open("input.mp3", "wb")
