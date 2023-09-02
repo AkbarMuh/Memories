@@ -34,3 +34,6 @@ flask-cors
 httpx==0.13.3
 SpeechRecognition==3.8.1
 streamlit-audiorecorder==0.0.2
+ffmpeg==1.4
+ffmpeg-downloader==0.2.0
+ffmpy==0.3.1
