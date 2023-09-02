@@ -439,7 +439,7 @@ def find_between( s, first, last ):
 
 
 menu_selected = option_menu(None, ["Chat", "Home", 'History', 'Json','Audio?'], 
-    icons=['chat', 'house', 'clock-history', 'filetype-json', 'gear'], 
+    icons=['chat', 'house', 'clock-history', 'filetype-json', 'mic'], 
     menu_icon="cast", default_index=0, orientation="horizontal",manual_select=False)
 
 
