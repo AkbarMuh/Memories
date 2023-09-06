@@ -593,10 +593,10 @@ if menu_selected == 'Chat':
 			audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
 			audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
 			
-			# from elevenlabs import clone, generate, play, set_api_key, save
-			# from elevenlabs.api import History
+			from elevenlabs import clone, generate, play, set_api_key, save
+			from elevenlabs.api import History
 
-			# set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
+			set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
 
 			# voice = clone(
 			#     name="Voice Name",
@@ -604,16 +604,23 @@ if menu_selected == 'Chat':
 			#     files=["./sample1.mp3", "./sample2.mp3"],
 			# )
 
-			# speak2 = generate(
-			# text=hasilgpt,
-			# voice="Bella",
-			# model="eleven_multilingual_v2"
-			# )
-			# print("menggunkan api voice")
-			# save(speak2, audio_path2)
+			try:
+				speak2 = generate(
+				text=hasilgpt[:200],
+				voice="Elli",
+				model="eleven_multilingual_v2"
+				)
+			except:
+				speak2 = generate(
+				text=hasilgpt,
+				voice="Elli",
+				model="eleven_multilingual_v2"
+				)
+			print("menggunkan api voice")
+			save(speak2, audio_path2)
 
 			#speak.save(audio_path)
-			speak2.save(audio_path2)
+			#speak2.save(audio_path2)
 			
 
 			# message(
@@ -937,27 +944,33 @@ if menu_selected == 'Chat':
 			audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
 			audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
 			
-			# from elevenlabs import clone, generate, play, set_api_key, save
-			# from elevenlabs.api import History
+			from elevenlabs import clone, generate, play, set_api_key, save
+			from elevenlabs.api import History
 
-			# set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
+			set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
 
 			# voice = clone(
 			#     name="Voice Name",
 			#     description="An old American male voice with a slight hoarseness in his throat. Perfect for news.",
 			#     files=["./sample1.mp3", "./sample2.mp3"],
 			# )
-
-			# speak2 = generate(
-			# text=hasilgpt,
-			# voice="Bella",
-			# model="eleven_multilingual_v2"
-			# )
+			try:
+				speak2 = generate(
+				text=hasilgpt[:200],
+				voice="Elli",
+				model="eleven_multilingual_v2"
+				)
+			except:
+				speak2 = generate(
+				text=hasilgpt,
+				voice="Elli",
+				model="eleven_multilingual_v2"
+				)
 			
-			# save(speak2, audio_path2)
+			save(speak2, audio_path2)
 
 			# speak.save(audio_path)
-			speak2.save(audio_path2)
+			#speak2.save(audio_path2)
 			
 
 			# message(
