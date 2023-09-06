@@ -607,13 +607,13 @@ if menu_selected == 'Chat':
 			try:
 				speak2 = generate(
 				text=hasilgpt[:200],
-				voice="Elli",
+				voice="Bella",
 				model="eleven_multilingual_v2"
 				)
 			except:
 				speak2 = generate(
 				text=hasilgpt,
-				voice="Elli",
+				voice="Bella",
 				model="eleven_multilingual_v2"
 				)
 			print("menggunkan api voice")
@@ -957,13 +957,13 @@ if menu_selected == 'Chat':
 			try:
 				speak2 = generate(
 				text=hasilgpt[:200],
-				voice="Elli",
+				voice="Bella",
 				model="eleven_multilingual_v2"
 				)
 			except:
 				speak2 = generate(
 				text=hasilgpt,
-				voice="Elli",
+				voice="Bella",
 				model="eleven_multilingual_v2"
 				)
 			
