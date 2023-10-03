@@ -135,28 +135,69 @@ def chatgpt4free(pencarian):
 	def get_answer(question: str) -> str:
 		# Set cloudflare clearance cookie and get answer from GPT-4 model
 		try:
-			# model you
-			# response = you.Completion.create(
-			# prompt=question,
-			# detailed=False,
-			# count=10,page=10,
-			# include_links=False,)
-			# #result = you.Completion.create(response)
-			# print(response.text)
-			# return response.text
 			
-			#model deep ai
-			# result = ''
-			# messages = [
-			# 	{"role": "system", "content": "Act as Museum Guide dan namamu adalah is memories. Museum ini adalah museum sejarah indonesia. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema sejarah indonesia jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut"},
-			# 	{"role": "user", "content": question}
-			# 	]
-			# for chunk in deepai.Completion.create("Act as Museum Guide dan namamu adalah is memories. Museum ini adalah museum sejarah indonesia. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema sejarah indonesia jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut "+ question):
-			# 	result = result + chunk
-			# print(result)
-			# return result
+def chatgpt4free(pencarian):
+	import os
+	import sys
+	sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
+	import streamlit as st
+	#from gpt4free import you,deepai
+	def get_answer(question: str) -> str:
+		# Set cloudflare clearance cookie and get answer from GPT-4 model
+		try:
+			openai.api_key = open("key.txt", "r").read().strip("\n")
+		        messages = [ {"role": "system", "content": "Jadilah pemandu museum, kamu dikenal sebagai mories, kamu sangat mengerti tentang museum terutama museum konferensi asia afrika (KAA) apabila diluar konteks tersebut kamu akan menjawabnya dengan 'Maaf Mories belum bisa menjawab' disertai alasannya. Usahakan menjawab sebisanya sebagai guru kepada muridnya dengan waktu 30 detik, jika tidak cukup jawab seringkas mungkin dan memberikan saran menanyakan bagian spesifik"}, ]
+		        #while True:
+		        #message = input("User : ")
+		        message = question  
+		        if message:
+		            messages.append(
+		                {"role": "user", "content": message},
+		            )
+		            chat = openai.ChatCompletion.create(
+		                model="gpt-3.5-turbo", messages=messages
+		            )
+		        reply = chat.choices[0].message.content
+		        print(f"ChatGPT: {reply}")
+		        messages.append({"role": "assistant", "content": reply})
+		        return reply
 
-			#Mode deep ai v2
+		except Exception as e:
+			# Return error message if an exception occurs
+			return (
+				f'An error occurred: {e}. Please make sure you are using a valid cloudflare clearance token and user agent.'
+			)
+
+	answer = get_answer(pencarian)
+	escaped = answer.encode('utf-8').decode('unicode-escape')
+	while '[[' in escaped:
+		link = find_between(escaped,'[[',')')
+		escaped = escaped.replace('[['+link+')','')
+	return escaped
+			return result
+
+		except Exception as e:
+			# Return error message if an exception occurs
+			return (
+				f'An error occurred: {e}. Please make sure you are using a valid cloudflare clearance token and user agent.'
+			)
+
+	answer = get_answer(pencarian)
+	escaped = answer.encode('utf-8').decode('unicode-escape')
+	while '[[' in escaped:
+		link = find_between(escaped,'[[',')')
+		escaped = escaped.replace('[['+link+')','')
+	return escaped
+
+def chatgpt4free_Lama(pencarian):
+	import os
+	import sys
+	sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
+	import streamlit as st
+	#from gpt4free import you,deepai
+	def get_answer(question: str) -> str:
+		# Set cloudflare clearance cookie and get answer from GPT-4 model
+		try:
 			result = ''
 			import g4f
 			message = [
@@ -189,7 +230,6 @@ def chatgpt4free(pencarian):
 		escaped = escaped.replace('[['+link+')','')
 	return escaped
 
-
 def gpt5(pencarian):
 	import os
 	import sys
@@ -199,46 +239,22 @@ def gpt5(pencarian):
 	def get_answer(question: str) -> str:
 		# Set cloudflare clearance cookie and get answer from GPT-4 model
 		try:
-			# model you
-			# response = you.Completion.create(
-			# prompt=question,
-			# detailed=False,
-			# count=10,page=10,
-			# include_links=False,)
-			# #result = you.Completion.create(response)
-			# print(response.text)
-			# return response.text
-			
-			#model deep ai
-			# result = ''
-			# messages = [
-			# 	{"role": "system", "content": "Act as Museum Guide dan namamu adalah is memories. Museum ini adalah museum sejarah indonesia. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema sejarah indonesia jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut"},
-			# 	{"role": "user", "content": question}
-			# 	]
-			# for chunk in deepai.Completion.create("Act as Museum Guide dan namamu adalah is memories. Museum ini adalah museum sejarah indonesia. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema sejarah indonesia jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut "+ question):
-			# 	result = result + chunk
-			# print(result)
-			# return result
-
-			#Mode deep ai v2
-			result = ''
-			import g4f
-			message = [
-				#{"role": "system", "content": "Act as Museum Guide dan namamu adalah is Mories. Museum ini adalah museum konferensi asia afrika. Perkenalkan dirimu sebelum menjawab.Jika pertanyaan keluar dari tema konferensi asia afrika jawab dengan maaf mories belum bisa bantu jawab dan jangan jawab pertanyaan itu. Jika masih berhubungan dengan museum jawablah seperti guru mengajar muridnya"},
-				{"role": "system", "content": "Perkenalkan dirimu dengan nama lisa"},
-				{"role": "user", "content": question}
-				]
-			response = g4f.ChatCompletion.create(
-					model="gpt-3.5-turbo",
-					provider=g4f.Provider.DeepAi,
-					#messages=[{"role": "user", "content": "Apa itu lumba lumba"}],
-					messages=message,
-					stream=True,
-				)
-			for message in response:
-				result = result + message
-			print(result)
-			return result
+			messages = [ {"role": "system", "content": 
+		                    "Perkenalkan dirimu dengan nama lisa."} ]
+		        #while True:
+		        #message = input("User : ")
+		        message = question  
+		        if message:
+		            messages.append(
+		                {"role": "user", "content": message},
+		            )
+		            chat = openai.ChatCompletion.create(
+		                model="gpt-3.5-turbo", messages=messages
+		            )
+		        reply = chat.choices[0].message.content
+		        print(f"ChatGPT: {reply}")
+		        messages.append({"role": "assistant", "content": reply})
+		        return reply
 
 		except Exception as e:
 			# Return error message if an exception occurs
@@ -954,23 +970,23 @@ if menu_selected == 'Chat':
 			#     description="An old American male voice with a slight hoarseness in his throat. Perfect for news.",
 			#     files=["./sample1.mp3", "./sample2.mp3"],
 			# )
-			try:
-				speak2 = generate(
-				text=hasilgpt[:200],
-				voice="Bella",
-				model="eleven_multilingual_v2"
-				)
-			except:
-				speak2 = generate(
-				text=hasilgpt,
-				voice="Bella",
-				model="eleven_multilingual_v2"
-				)
+			# try:
+			# 	speak2 = generate(
+			# 	text=hasilgpt[:200],
+			# 	voice="Bella",
+			# 	model="eleven_multilingual_v2"
+			# 	)
+			# except:
+			# 	speak2 = generate(
+			# 	text=hasilgpt,
+			# 	voice="Bella",
+			# 	model="eleven_multilingual_v2"
+			# 	)
 			
-			save(speak2, audio_path2)
+			#save(speak2, audio_path2)
 
 			# speak.save(audio_path)
-			#speak2.save(audio_path2)
+			speak2.save(audio_path2)
 			
 
 			# message(
@@ -1133,163 +1149,6 @@ with st.sidebar:
 		
 	with col2:
 		st.write("\n\n\n\n\n")
-		# c=st.container()
-		# with c:
-		# 	audio = audiorecorder("Start","Recognizer ...")
-
-		# if len(audio) > 0:
-		# 	# To play audio in frontend:
-		# 	#st.audio(audio.tobytes())
-			
-		# 	# To save audio to a file:
-		# 	wav_file = open("input.mp3", "wb")
-		# 	wav_file.write(audio.tobytes())
-
-		# 	import time
-		# 	t = time.localtime()
-		# 	waktu = time.strftime("%H_%M_%S", t)
-		# 	current_time = waktu 
-		# 	filesuara = "./suara/"+current_time+".wav"
-		# 	import subprocess
-		# 	subprocess.call(['ffmpeg', '-i', 'input.mp3',
-		# 					filesuara]) 
-		# 	r = sr.Recognizer()
-		# 	harvard = sr.AudioFile(filesuara)
-		# 	with harvard as source:
-		# 		audio = r.record(source)
-		# 		output = r.recognize_google(audio, language='id')
-		# 		output = output.title()
-		# 		st.text(output + " ?")
-
-		# # 	#st.write(scrap(output))
-		# # 	if gpt:
-		# # 		hasil = gpt5(output)
-		# # 		st.markdown(hasil)
-
-		# # 		speak = gTTS(text=output+ ". /n" + hasil, lang="id", slow=False)
-		# # 		audio_path = "./suara/"+current_time+".mp3"
-		# # 		speak.save(audio_path)
-		# # 		st.audio(audio_path)
-		# # else:
-		# # 	pass
-		# 	prompt = output
-			
-		# 	#st.chat_message("user").markdown(prompt)
-		# 	# Add user message to chat history
-		# 	st.session_state.messages.append({"role": "user", "content": prompt})
-			
-		# 	query = prompt
-		# 	to_lang = 'en'
-		# 	list_hasil = []
-		# 	try:
-		# 		list_hasil = scrap(query)
-		# 	except:
-		# 		list_hasil = ['Hasil Tidak ditemukan','','Artikel Tidak tersedia']
-		# 	hasil = list_hasil[0]
-
-		# 	print(query + '?')
-
-		# 	#message(query + '?', is_user=True)
-
-		# 	#st.session_state.messages.append({"role": "user", "content": query + '?'})
-
-		# 	#hasil = GoogleTranslator(source='auto', target='id').translate(hasil)
-
-		# 	print(list_hasil)
-		# 	img_path = get_LinkFirstImage(query)
-
-
-		# 	#message(list_hasil[0])
-
-		# 	#st.session_state.messages.append({"role": "assistant", "content": list_hasil[0]})
-
-
-
-		# 	deskripsi = list_hasil[2] + " baca Selengkapnya "+ list_hasil[1]
-		# 	kodeSuara = str(random.randint(10000000000,1000000000000000000))
-		# 	kodeSuara2 = str(random.randint(10000000000,1000000000000000000))
-		# 	deskripsi = list_hasil[0] + "\n" + deskripsi
-		# 	#st.session_state.messages.append({"role": "assistant", "content": deskripsi})
-		# 	#hasilgpt = GoogleTranslator(source='auto', target='id').translate(chatgpt4free(query)) # kalau mau translate dulu
-		# 	#prompt = "Act as Museum Guide with name memories. Museum ini adalah museum Hewan. Perkenalkan dirimu sebelum menjelaskan.Jika pertanyaan keluar dari tema hewan jawab dengan minta maaf tidak dapat menjawab pertanyaan tersebut "
-		# 	#prompt = "answer in one paragraph"
-		# 	hasilgpt = chatgpt4free(prompt + query)
-		# 	# coba 1
-		# 	if detect(hasilgpt) != 'id':
-		# 		hasilgpt = hasilgpt.replace("Memories","Alice")
-		# 		hasilgpt = GoogleTranslator(source='auto', target='id').translate(hasilgpt)
-		# 		hasilgpt = hasilgpt.replace("Alice","Memories")
-		# 	# coba 2
-		# 	if "Tidak dapat mengambil tanggapan, Coba lagi." == hasilgpt:
-		# 		hasilgpt = chatgpt4free(query)
-		# 	# coba 3
-		# 		if "Tidak dapat mengambil tanggapan" in hasilgpt or "Unable to fetch the response" in hasilgpt :
-		# 			hasilgpt = deskripsi
-			
-		# 	speak = gTTS(text="Menurut Google Search" + list_hasil[2] + "Klik Link untuk membaca selengkapnya", lang="id", slow=False)
-		# 	speak2 = gTTS(text="" + hasilgpt, lang="id", slow=False)
-		# 	audio_path = "./suara/captured_voice"+kodeSuara+".mp3"
-		# 	audio_path2 = "./suara/captured_voice"+kodeSuara2+".mp3"
-			
-		# 	# from elevenlabs import clone, generate, play, set_api_key, save
-		# 	# from elevenlabs.api import History
-
-		# 	# set_api_key("6b5b2cfbb952aff99001c460c4355b5c")
-
-		# 	# voice = clone(
-		# 	#     name="Voice Name",
-		# 	#     description="An old American male voice with a slight hoarseness in his throat. Perfect for news.",
-		# 	#     files=["./sample1.mp3", "./sample2.mp3"],
-		# 	# )
-
-		# 	# speak2 = generate(
-		# 	# text=hasilgpt,
-		# 	# voice="Bella",
-		# 	# model="eleven_multilingual_v2"
-		# 	# )
-			
-		# 	# save(speak2, audio_path2)
-
-		# 	# speak.save(audio_path)
-		# 	speak2.save(audio_path2)
-			
-
-		# 	# message(
-		# 	# 			f'<img width="100%" height="200" src="{img_path}"/>', 
-		# 	# 			key=f"{random.randint(100,1000)}", 
-		# 	# 			allow_html=True
-		# 	# 		)
-		# 	with open('readme.txt', 'w') as f:
-		# 		f.write(img_path)
-		# 	#st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path}"></audio>'})
-		# 	st.session_state.messages.append({"role": "assistant", "content": f'<img width="100%" height="200" src="{img_path}"/>'})
-
-		# 	#DisplayJwbBot(f'<audio controls src="{"https://docs.google.com/uc?export=open&id=1JZLGiYiguorOkIi53zYKHGEz5o6z-Im0"}"></audio>')
-
-
-		# 	linkYT = get_LinkYT(query)
-		# 	# message(
-		# 	# 			f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>', 
-		# 	# 			key=f"{random.randint(100,1000)}",
-		# 	# 			allow_html=True
-		# 	# 		)
-
-		# 	st.session_state.messages.append({"role": "assistant", "content": f'<iframe width="400" height="215" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>'})
-
-		# 	#hasilgpt = GoogleTranslator(source='auto', target='id').translate(testModelGpt4all(GoogleTranslator(source='auto', target='english').translate(query)))
-		# 	st.session_state.messages.append({"role": "assistant", "content": hasilgpt})
-		# 	st.session_state.messages.append({"role": "assistant", "content": f'<audio controls src="{audio_path2}"></audio>'})
-
-		# 	DisplayJwbBot(query + '?')
-		# 	#DisplayJwbBot(list_hasil[0])
-		# 	#DisplayJwbBot(deskripsi)
-		# 	#play_audio(audio_path)
-		# 	if Gambar :
-		# 		DisplayJwbBot(f'<img width="100%" height="400" src="{img_path}"/>')
-		# 	if Video:
-		# 		DisplayJwbBot(f'<iframe width="400" height="400" src={linkYT} title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media;"></iframe>')
-		# 	DisplayJwbBot(hasilgpt)
-		# 	play_audio(audio_path2)
 		
 		
 		css_example = '''                                                                                                                                            
