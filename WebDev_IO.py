@@ -164,20 +164,6 @@ def chatgpt4free(pencarian):
 		link = find_between(escaped,'[[',')')
 		escaped = escaped.replace('[['+link+')','')
 	return escaped
-			return result
-
-		except Exception as e:
-			# Return error message if an exception occurs
-			return (
-				f'An error occurred: {e}. Please make sure you are using a valid cloudflare clearance token and user agent.'
-			)
-
-	answer = get_answer(pencarian)
-	escaped = answer.encode('utf-8').decode('unicode-escape')
-	while '[[' in escaped:
-		link = find_between(escaped,'[[',')')
-		escaped = escaped.replace('[['+link+')','')
-	return escaped
 
 def chatgpt4free_Lama(pencarian):
 	import os
