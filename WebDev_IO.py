@@ -136,7 +136,7 @@ def chatgpt4free(pencarian):
 		# Set cloudflare clearance cookie and get answer from GPT-4 model
 		try:
 			openai.api_key = open("key.txt", "r").read().strip("\n")
-		        messages = [ {"role": "system", "content": "Jadilah pemandu museum, kamu dikenal sebagai mories, kamu sangat mengerti tentang museum terutama museum konferensi asia afrika (KAA) apabila diluar konteks tersebut kamu akan menjawabnya dengan 'Maaf Mories belum bisa menjawab' disertai alasannya. Usahakan menjawab sebisanya sebagai guru kepada muridnya dengan waktu 30 detik, jika tidak cukup jawab seringkas mungkin dan memberikan saran menanyakan bagian spesifik"}, ]
+			messages = [ {"role": "system", "content": "Jadilah pemandu museum, kamu dikenal sebagai mories, kamu sangat mengerti tentang museum terutama museum konferensi asia afrika (KAA) apabila diluar konteks tersebut kamu akan menjawabnya dengan 'Maaf Mories belum bisa menjawab' disertai alasannya. Usahakan menjawab sebisanya sebagai guru kepada muridnya dengan waktu 30 detik, jika tidak cukup jawab seringkas mungkin dan memberikan saran menanyakan bagian spesifik"}, ]
 		        #while True:
 		        #message = input("User : ")
 		        message = question  
