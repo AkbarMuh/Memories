@@ -604,23 +604,23 @@ if menu_selected == 'Chat':
 			#     files=["./sample1.mp3", "./sample2.mp3"],
 			# )
 
-			try:
-				speak2 = generate(
-				text=hasilgpt[:200],
-				voice="Bella",
-				model="eleven_multilingual_v2"
-				)
-			except:
-				speak2 = generate(
-				text=hasilgpt,
-				voice="Bella",
-				model="eleven_multilingual_v2"
-				)
-			print("menggunkan api voice")
-			save(speak2, audio_path2)
+			#try:
+			#	speak2 = generate(
+			#	text=hasilgpt[:200],
+			#	voice="Bella",
+			#	model="eleven_multilingual_v2"
+			#	)
+			#except:
+			#	speak2 = generate(
+			#	text=hasilgpt,
+			#	voice="Bella",
+			#	model="eleven_multilingual_v2"
+			#	)
+			#print("menggunkan api voice")
+			#save(speak2, audio_path2)
 
 			#speak.save(audio_path)
-			#speak2.save(audio_path2)
+			speak2.save(audio_path2)
 			
 
 			# message(
