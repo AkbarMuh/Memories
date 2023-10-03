@@ -137,20 +137,20 @@ def chatgpt4free(pencarian):
 		try:
 			openai.api_key = open("key.txt", "r").read().strip("\n")
 			messages = [ {"role": "system", "content": "Jadilah pemandu museum, kamu dikenal sebagai mories, kamu sangat mengerti tentang museum terutama museum konferensi asia afrika (KAA) apabila diluar konteks tersebut kamu akan menjawabnya dengan 'Maaf Mories belum bisa menjawab' disertai alasannya. Usahakan menjawab sebisanya sebagai guru kepada muridnya dengan waktu 30 detik, jika tidak cukup jawab seringkas mungkin dan memberikan saran menanyakan bagian spesifik"}, ]
-		        #while True:
-		        #message = input("User : ")
-		        message = question  
-		        if message:
-		            messages.append(
-		                {"role": "user", "content": message},
-		            )
-		            chat = openai.ChatCompletion.create(
-		                model="gpt-3.5-turbo", messages=messages
-		            )
-		        reply = chat.choices[0].message.content
-		        print(f"ChatGPT: {reply}")
-		        messages.append({"role": "assistant", "content": reply})
-		        return reply
+			#while True:
+			#message = input("User : ")
+			message = question  
+			if message:
+			    messages.append(
+				{"role": "user", "content": message},
+			    )
+			    chat = openai.ChatCompletion.create(
+				model="gpt-3.5-turbo", messages=messages
+			    )
+			reply = chat.choices[0].message.content
+			print(f"ChatGPT: {reply}")
+			messages.append({"role": "assistant", "content": reply})
+			return reply
 
 		except Exception as e:
 			# Return error message if an exception occurs
