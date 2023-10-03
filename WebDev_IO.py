@@ -125,16 +125,6 @@ styles = {'material-icons':{'color': 'red'},
 # 	message(input_user)
 ####################################
 query = ''
-
-def chatgpt4free(pencarian):
-	import os
-	import sys
-	sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
-	import streamlit as st
-	#from gpt4free import you,deepai
-	def get_answer(question: str) -> str:
-		# Set cloudflare clearance cookie and get answer from GPT-4 model
-		try:
 			
 def chatgpt4free(pencarian):
 	import os
